@@ -1,5 +1,7 @@
 # Essential Launcher
 
+[![Build Status](https://travis-ci.org/clemensbartz/essential-launcher.svg?branch=release%2Fv1.0)](https://travis-ci.org/clemensbartz/essential-launcher)
+
 ## Overview
 
 Essential Launcher is a small launcher for Android. It provides a minimum of functionality.
