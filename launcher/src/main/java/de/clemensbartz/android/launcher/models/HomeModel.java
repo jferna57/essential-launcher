@@ -52,9 +52,16 @@ public final class HomeModel {
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
     };
-    /** Order by usage DESC constant. */
+    /** Order by usage DESC, package name DESC, class name DESC constant. */
     public static final String ORDER_BY =
-            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE + _DESC;
+            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
+                    + _DESC
+            + ", "
+            + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME
+                    + _DESC
+            + ", "
+            + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME
+                    + _DESC;
     /** Filter for package name and class name constant. */
     public static final String SELECTION =
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME
