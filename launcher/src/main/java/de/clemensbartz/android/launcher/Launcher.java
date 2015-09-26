@@ -204,6 +204,7 @@ public final class Launcher extends Activity {
         // Initialize widget handling.
         appWidgetManager = AppWidgetManager.getInstance(this);
         appWidgetHost = new AppWidgetHost(this, R.id.frWidget);
+        appWidgetHost.startListening();
 
         // Load last widget lazily.
         LayoutInflater.from(this).inflate(R.layout.home_empty, frWidget);
@@ -224,7 +225,6 @@ public final class Launcher extends Activity {
         super.onResume();
 
         switchTo(HOME_ID);
-        appWidgetHost.startListening();
 
         updateDock();
     }
@@ -232,8 +232,6 @@ public final class Launcher extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-
-        appWidgetHost.stopListening();
 
         new CloseDatabaseAsyncTask().execute();
     }
@@ -278,6 +276,15 @@ public final class Launcher extends Activity {
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        appWidgetHost.stopListening();
+        appWidgetHost.deleteHost();
+        appWidgetHost = null;
+    }
+
     /**
      * Open an app from the model.
      * @param applicationModel the model
@@ -310,8 +317,6 @@ public final class Launcher extends Activity {
         switch (vsLauncher.getDisplayedChild()) {
             case HOME_ID:
                 if (id == DRAWER_ID) {
-                    appWidgetHost.stopListening();
-
                     final IntentFilter filter = new IntentFilter();
                     filter.addAction(Intent.ACTION_PACKAGE_ADDED);
                     filter.addAction(Intent.ACTION_INSTALL_PACKAGE);
@@ -332,8 +337,6 @@ public final class Launcher extends Activity {
             case DRAWER_ID:
                 if (id == HOME_ID) {
                     unregisterReceiver(packageChangedBroadcastReceiver);
-
-                    appWidgetHost.startListening();
 
                     vsLauncher.showPrevious();
 
@@ -371,6 +374,7 @@ public final class Launcher extends Activity {
 
         if (model.getAppWidgetId() > -1) {
             appWidgetHost.deleteAppWidgetId(model.getAppWidgetId());
+            frWidget.removeAllViews();
         }
 
         final int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
