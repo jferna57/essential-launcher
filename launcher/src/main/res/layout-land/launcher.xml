@@ -43,7 +43,9 @@
                     android:src="@drawable/ic_launcher" android:layout_weight="1"
                     android:clickable="true" android:paddingEnd="5dp"
                     android:paddingStart="5dp" android:padding="5dp"
-                    android:contentDescription="@string/unassigned_dock"/>
+                    android:contentDescription="@string/unassigned_dock"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="55dp"
                        android:id="@+id/ivDock2"
@@ -51,7 +53,9 @@
                        android:layout_weight="1" android:clickable="true"
                        android:paddingStart="5dp" android:paddingEnd="5dp"
                        android:padding="5dp"
-                       android:contentDescription="@string/unassigned_dock"/>
+                       android:contentDescription="@string/unassigned_dock"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
 
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="55dp"
@@ -60,7 +64,9 @@
                        android:layout_weight="1" android:clickable="true"
                        android:paddingStart="5dp" android:paddingEnd="5dp"
                        android:padding="5dp"
-                       android:contentDescription="@string/unassigned_dock"/>
+                       android:contentDescription="@string/unassigned_dock"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
 
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="55dp"
@@ -69,7 +75,10 @@
                        android:layout_weight="1" android:onClick="openDrawer"
                        android:clickable="true" android:padding="5dp"
                        android:paddingEnd="5dp" android:paddingStart="5dp"
-                       android:contentDescription="@string/open_drawer"/>
+                       android:contentDescription="@string/open_drawer"
+                android:adjustViewBounds="true"
+                android:longClickable="true"
+                android:scaleType="fitCenter" />
 
             <ImageView android:layout_width="wrap_content"
                        android:layout_height="55dp"
@@ -78,7 +87,9 @@
                        android:layout_weight="1" android:clickable="true"
                        android:padding="5dp" android:paddingEnd="5dp"
                        android:paddingStart="5dp"
-                       android:contentDescription="@string/unassigned_dock"/>
+                       android:contentDescription="@string/unassigned_dock"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -90,7 +101,9 @@
                 android:padding="5dp"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                android:contentDescription="@string/unassigned_dock" />
+                android:contentDescription="@string/unassigned_dock"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -102,7 +115,9 @@
                 android:padding="5dp"
                 android:paddingEnd="5dp"
                 android:paddingStart="5dp"
-                android:contentDescription="@string/unassigned_dock" />
+                android:contentDescription="@string/unassigned_dock"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
     </LinearLayout>
