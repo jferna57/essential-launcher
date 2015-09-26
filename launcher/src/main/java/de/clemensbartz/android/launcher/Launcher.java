@@ -112,8 +112,6 @@ public final class Launcher extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launcher);
 
-
-
         if (BuildConfig.DEBUG) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                     .detectAll()
@@ -195,7 +193,6 @@ public final class Launcher extends Activity {
         icLauncher = getDrawable(R.drawable.ic_launcher);
 
         model = new HomeModel(this);
-        new LoadModelAsyncTask().execute();
 
         // Animate the image of the drawer button.
         final RippleDrawable rd = new RippleDrawable(ColorStateList.valueOf(Color.GRAY), ivDrawer.getDrawable(), null);
@@ -213,6 +210,9 @@ public final class Launcher extends Activity {
         lvApplicationsAdapter = new DrawerListAdapter(this, lvApplications, R.layout.drawer_item, applicationModels);
 
         lvApplications.setAdapter(lvApplicationsAdapter);
+
+        // Go
+        new LoadModelAsyncTask().execute();
     }
 
     @Override
