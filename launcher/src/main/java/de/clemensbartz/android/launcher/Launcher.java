@@ -281,7 +281,6 @@ public final class Launcher extends Activity {
         super.onDestroy();
 
         appWidgetHost.stopListening();
-        appWidgetHost = null;
     }
 
     /**
