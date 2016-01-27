@@ -85,6 +85,8 @@ public final class Launcher extends Activity {
     protected static final int ITEM_UNINSTALL = 2;
     /** Request code for reset app counter. */
     protected static final int ITEM_RESET = 3;
+    /** Request code for toggle disabling app. */
+    protected static final int ITEM_TOGGLE_DISABLED = 4;
 
     /** The view switcher of the launcher. */
     private ViewSwitcher vsLauncher;
@@ -197,10 +199,15 @@ public final class Launcher extends Activity {
 
                 final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
                 final ApplicationModel model = (ApplicationModel) applicationModels.get(info.position);
+                contextMenuApplicationModel = model;
 
                 contextMenu.setHeaderTitle(model.getLabel());
                 final MenuItem itemAppInfo = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
                 itemAppInfo.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
+
+                final MenuItem toggleDisabledItem = contextMenu.add(0, ITEM_TOGGLE_DISABLED, 0, R.string.showInDock);
+                toggleDisabledItem.setCheckable(true);
+                toggleDisabledItem.setChecked(!model.isDisabled());
 
                 // Check for system apps
                 try {
@@ -295,6 +302,9 @@ public final class Launcher extends Activity {
             switch (item.getItemId()) {
                 case ITEM_RESET:
                     new ResetUsageAsyncTask().execute(contextMenuApplicationModel);
+                    break;
+                case ITEM_TOGGLE_DISABLED:
+                    new ToggleDockAsyncTask().execute(contextMenuApplicationModel);
                     break;
             }
 
@@ -556,6 +566,25 @@ public final class Launcher extends Activity {
         protected Integer doInBackground(final Integer... chars) {
             model.close();
             return 0;
+        }
+    }
+
+    /**
+     * Toggle dock visibility for an application.
+     */
+    private class ToggleDockAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
+        @Override
+        protected Integer doInBackground(ApplicationModel... applicationModels) {
+            for (ApplicationModel applicationModel : applicationModels) {
+                model.toggleDisabled(applicationModel.getPackageName(), applicationModel.getClassName());
+            }
+
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            new LoadMostUsedAppsAsyncTask().execute();
         }
     }
 

@@ -90,6 +90,14 @@ public final class ApplicationModel {
         return className;
     }
 
+    /**
+     *
+     * @return if the app is disabled in the dock
+     */
+    public boolean isDisabled() {
+        return disabled;
+    }
+
     @Override
     public String toString() {
         return getClassName();

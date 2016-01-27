@@ -24,4 +24,5 @@
     <string name="nowidgetset">No widget set. Long press the drawer icon to select a new widget.</string>
     <string name="unassigned_dock">Unassigned dock item</string>
     <string name="resetcounter">Reset counter</string>
+    <string name="showInDock">Show in dock</string>
 </resources>

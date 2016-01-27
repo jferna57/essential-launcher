@@ -26,7 +26,6 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import de.clemensbartz.android.launcher.db.ApplicationUsageDbHelper;
 import de.clemensbartz.android.launcher.db.ApplicationUsageModel;
 
@@ -181,6 +180,60 @@ public final class HomeModel {
                 }
             }
         } while (!success);
+    }
+
+    /**
+     * Toggle disabled state of an application.
+     *
+     * @param packageName the package name of the app
+     * @param className the class name of the app
+     */
+    public void toggleDisabled(final String packageName, final String className) {
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+        Cursor c = null;
+        try {
+            // Get entry
+            c = db.query(ApplicationUsageModel.ApplicationUsage.TABLE_NAME,
+                    new String[]{
+                            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
+                    },
+                    SELECTION, new String[]{packageName, className},
+                    null, null, null);
+            if (c != null) {
+                if (c.getCount() > 1) {
+                    delete(packageName, className);
+                }
+                if (c.moveToFirst()) {
+                    final boolean disabled = c.getInt(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED)) > 0;
+                    // update
+                    final ContentValues values = new ContentValues(3);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME, className);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME, packageName);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED, !disabled);
+
+                    db.update(ApplicationUsageModel.ApplicationUsage.TABLE_NAME,
+                            values, SELECTION, new String[]{packageName, className});
+                    db.setTransactionSuccessful();
+                } else {
+                    // insert
+                    final ContentValues values = new ContentValues(4);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME, className);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME, packageName);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE, 0);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED, true);
+
+                    db.insertOrThrow(ApplicationUsageModel.ApplicationUsage.TABLE_NAME, null, values);
+                    db.setTransactionSuccessful();
+                }
+            }
+        } finally {
+            db.endTransaction();
+            if (c != null) {
+                c.close();
+            }
+        }
     }
 
     /**
