@@ -585,6 +585,7 @@ public final class Launcher extends Activity {
         @Override
         protected void onPostExecute(Integer integer) {
             new LoadMostUsedAppsAsyncTask().execute();
+            switchTo(HOME_ID);
         }
     }
 
