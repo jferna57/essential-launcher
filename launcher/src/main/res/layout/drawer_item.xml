@@ -24,6 +24,7 @@
     <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:contentDescription="@string/drawer_item_image"
             android:id="@+id/icon" android:layout_gravity="center_horizontal"
             />
     <TextView
