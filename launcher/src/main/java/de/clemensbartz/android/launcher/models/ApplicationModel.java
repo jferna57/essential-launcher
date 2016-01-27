@@ -34,6 +34,8 @@ public final class ApplicationModel {
     private final String packageName;
     /** The full class name. */
     private final String className;
+    /** The disabled flag. */
+    private final boolean disabled;
 
     /**
      * Create a new application.
@@ -46,12 +48,14 @@ public final class ApplicationModel {
             final CharSequence label,
             final Drawable icon,
             final String packageName,
-            final String className) {
+            final String className,
+            final boolean disabled) {
 
         this.label = label;
         this.icon = icon;
         this.packageName = packageName;
         this.className = className;
+        this.disabled = disabled;
     }
 
     /**

@@ -659,7 +659,8 @@ public final class Launcher extends Activity {
 
             for (ResolveInfo resolveInfo : resolveInfos) {
                 i = i + 1;
-                applicationModels.add(new ApplicationModel(resolveInfo.loadLabel(pm), resolveInfo.loadIcon(pm), resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name));
+                final boolean disabled = model.isDisabled(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
+                applicationModels.add(new ApplicationModel(resolveInfo.loadLabel(pm), resolveInfo.loadIcon(pm), resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name, disabled));
                 if (i % REFRESH_NUMBER == 0) {
                     publishProgress();
                 }

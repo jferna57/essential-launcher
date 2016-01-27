@@ -26,6 +26,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import de.clemensbartz.android.launcher.db.ApplicationUsageDbHelper;
 import de.clemensbartz.android.launcher.db.ApplicationUsageModel;
 
@@ -50,7 +51,8 @@ public final class HomeModel {
     public static final String[] COLUMNS = {
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME,
-            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
+            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE,
+            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
     };
     /** Order by usage DESC, package name DESC, class name DESC constant. */
     public static final String ORDER_BY =
@@ -146,9 +148,11 @@ public final class HomeModel {
                     for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
                         String packageName = null;
                         String className = null;
+                        boolean disabled = false;
                         try {
                             packageName = c.getString(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME));
                             className = c.getString(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME));
+                            disabled = c.getInt(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED)) > 0;
                         } catch (IllegalArgumentException e) {
                             continue;
                         }
@@ -158,7 +162,7 @@ public final class HomeModel {
                             if (!info.enabled) {
                                 delete(packageName, className);
                             }
-                            final ApplicationModel applicationModel = new ApplicationModel(info.loadLabel(pm), info.loadIcon(pm), packageName, className);
+                            final ApplicationModel applicationModel = new ApplicationModel(info.loadLabel(pm), info.loadIcon(pm), packageName, className, disabled);
                             mostUsedApplications.add(applicationModel);
                         } catch (PackageManager.NameNotFoundException e) {
                             if (packageName != null && className != null) {
@@ -177,6 +181,49 @@ public final class HomeModel {
                 }
             }
         } while (!success);
+    }
+
+    /**
+     * Determines if an application is disabled.
+     *
+     * @param packageName the package name of the app
+     * @param className the class name of the app
+     * @return if it is disabled
+     */
+    public boolean isDisabled(final String packageName, final String className) {
+        final SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        boolean disabled = false;
+
+        db.beginTransaction();
+        Cursor c = null;
+        try {
+            // Get entry
+            c = db.query(ApplicationUsageModel.ApplicationUsage.TABLE_NAME,
+                    new String[]{
+                            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
+                    },
+                    SELECTION, new String[]{packageName, className},
+                    null, null, null);
+            if (c != null) {
+                if (c.getCount() > 1) {
+                    delete(packageName, className);
+                }
+                if (c.moveToFirst()) {
+                    for (String column : c.getColumnNames()) {
+                        Log.d(TAG, column);
+                    }
+                    disabled = c.getInt(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED)) > 0;
+                }
+            }
+        } finally {
+            db.endTransaction();
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        return disabled;
     }
 
     /**
