@@ -26,4 +26,8 @@
   <string name="resetcounter">Zähler zurücksetzen</string>
   <string name="showInDock">Im Dock anzeigen</string>
   <string name="ok">OK</string>
+  <string name="drawer_long_press_description">Gedrückt halten: Widget ändern</string>
+  <string name="drawer_short_press_description">Alle Apps anzeigen</string>
+  <string name="icon_long_press_description">Gedrückt halten: Zähler zurücksetzen oder App ausblenden</string>
+  <string name="icon_short_press_description">Dock: meistgenutzte Apps anzeigen</string>
 </resources>
