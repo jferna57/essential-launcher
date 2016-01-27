@@ -83,6 +83,8 @@ public final class Launcher extends Activity {
     protected static final int ITEM_APPINFO = 1;
     /** Request code for app uninstall. */
     protected static final int ITEM_UNINSTALL = 2;
+    /** Request code for reset app counter. */
+    protected static final int ITEM_RESET = 3;
 
     /** The view switcher of the launcher. */
     private ViewSwitcher vsLauncher;
@@ -103,6 +105,8 @@ public final class Launcher extends Activity {
     private List<ApplicationModel> applicationModels = new ArrayList<>();
     /** The broadcast receiver for package changes. */
     private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver = new PackageChangedBroadcastReceiver();
+    /** The temporary application model for context menus. */
+    private ApplicationModel contextMenuApplicationModel;
 
     /** The drawable for the launcher. */
     private Drawable icLauncher;
@@ -159,10 +163,13 @@ public final class Launcher extends Activity {
 
                         if (contextImageView.getTag() instanceof ApplicationModel) {
                             final ApplicationModel model = (ApplicationModel) contextImageView.getTag();
+                            contextMenuApplicationModel = model;
 
                             contextMenu.setHeaderTitle(model.getLabel());
                             final MenuItem item = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
                             item.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
+
+                            contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
                         }
                     }
                 }
@@ -280,6 +287,23 @@ public final class Launcher extends Activity {
                 createWidget(data);
             }
         }
+    }
+
+    @Override
+    public boolean onContextItemSelected(final MenuItem item) {
+        if (item.getIntent() == null && contextMenuApplicationModel != null) {
+            switch (item.getItemId()) {
+                case ITEM_RESET:
+                    new ResetUsageAsyncTask().execute(contextMenuApplicationModel);
+                    break;
+            }
+
+            // "Consume" the model
+            contextMenuApplicationModel = null;
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -532,6 +556,25 @@ public final class Launcher extends Activity {
         protected Integer doInBackground(final Integer... chars) {
             model.close();
             return 0;
+        }
+    }
+
+    /**
+     * Async for resetting the database.
+     */
+    private class ResetUsageAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
+        @Override
+        protected Integer doInBackground(ApplicationModel... applicationModels) {
+            for (ApplicationModel applicationModel : applicationModels) {
+                model.resetUsage(applicationModel.getPackageName(), applicationModel.getClassName());
+            }
+
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            new LoadMostUsedAppsAsyncTask().execute();
         }
     }
 

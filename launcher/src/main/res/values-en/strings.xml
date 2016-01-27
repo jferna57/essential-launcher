@@ -23,4 +23,5 @@
   <string name="uninstall">Unistall</string>
   <string name="unassigned_dock">Unassigned dock item</string>
   <string name="appinfo">Show app info</string>
+  <string name="resetcounter">Reset counter</string>
 </resources>

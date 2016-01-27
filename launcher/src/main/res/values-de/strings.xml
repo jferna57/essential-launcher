@@ -23,4 +23,5 @@
   <string name="open_drawer">Alle Apps anzeigen</string>
   <string name="unassigned_dock">Nicht zugewiesene Verknüpfung</string>
   <string name="uninstall">Deinstallieren</string>
+  <string name="resetcounter">Zähler zurücksetzen</string>
 </resources>

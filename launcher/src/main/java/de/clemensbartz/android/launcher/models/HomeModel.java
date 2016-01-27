@@ -180,6 +180,61 @@ public final class HomeModel {
     }
 
     /**
+     * Reset usage to 0 for package and class.
+     *
+     * @param packageName the package name
+     * @param className the class name
+     */
+    public void resetUsage(final String packageName, final String className) {
+        final SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.beginTransaction();
+        Cursor c = null;
+        try {
+            // Get entry
+            c = db.query(ApplicationUsageModel.ApplicationUsage.TABLE_NAME,
+                    new String[]{
+                            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
+                    },
+                    SELECTION, new String[]{packageName, className},
+                    null, null, null);
+            if (c != null) {
+                if (c.getCount() > 1) {
+                    delete(packageName, className);
+                }
+                if (c.moveToFirst()) {
+                    // update
+                    final ContentValues values = new ContentValues(3);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME, className);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME, packageName);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE, 0);
+
+                    db.update(ApplicationUsageModel.ApplicationUsage.TABLE_NAME,
+                            values, SELECTION, new String[]{packageName, className});
+                    db.setTransactionSuccessful();
+                } else {
+                    // insert
+                    final ContentValues values = new ContentValues(4);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME, className);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME, packageName);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE, 0);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED, false);
+
+                    db.insertOrThrow(ApplicationUsageModel.ApplicationUsage.TABLE_NAME, null, values);
+                    db.setTransactionSuccessful();
+                }
+            }
+        } finally {
+            db.endTransaction();
+            if (c != null) {
+                c.close();
+            }
+        }
+
+        updateApplications();
+    }
+
+    /**
      * Add one usage counter for the package and class name.
      * Also updates the internal list.
      * <p/>

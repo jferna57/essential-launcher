@@ -23,4 +23,5 @@
   <string name="unassigned_dock">Vide icône du dock</string>
   <string name="open_drawer">Tiroir des applications</string>
   <string name="nowidgetset">Pas de Widget sélectionné. Appuyez de tiroir prolongée pour sélectionner widget.</string>
+  <string name="resetcounter">Réinitialiser le compteur</string>
 </resources>
