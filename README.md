@@ -28,6 +28,7 @@ If you want to support development, please make sure:
 - You use SDK Version >= 21.
 - You use Java >= 7.
 - The maximum size for the APK is 50 KB.
+- You add your own `local.properties` file pointing to your android sdk: `sdk.dir=/opt/android-sdk-linux/`
 
 ## Not yet supported features
 
