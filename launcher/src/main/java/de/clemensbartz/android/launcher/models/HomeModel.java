@@ -71,7 +71,9 @@ public final class HomeModel {
     /** Where statement for getting only enabled applications. */
     public static final String WHERE =
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
-                    + "=0";
+                    + "=0 AND "
+            + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
+                    + ">0";
 
     /** Database helper. */
     private final ApplicationUsageDbHelper dbHelper;
