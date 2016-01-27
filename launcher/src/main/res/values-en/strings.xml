@@ -20,7 +20,7 @@
     <string name="app_name">Essential Launcher</string>
   <string name="nowidgetset">No widget set. Long press the drawer icon to select a new widget.</string>
   <string name="open_drawer">Show all apps</string>
-  <string name="uninstall">Unistall</string>
+  <string name="uninstall">Uninstall</string>
   <string name="unassigned_dock">Unassigned dock item</string>
   <string name="appinfo">Show app info</string>
   <string name="resetcounter">Reset counter</string>
