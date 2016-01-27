@@ -210,9 +210,6 @@ public final class HomeModel {
                     delete(packageName, className);
                 }
                 if (c.moveToFirst()) {
-                    for (String column : c.getColumnNames()) {
-                        Log.d(TAG, column);
-                    }
                     disabled = c.getInt(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED)) > 0;
                 }
             }
