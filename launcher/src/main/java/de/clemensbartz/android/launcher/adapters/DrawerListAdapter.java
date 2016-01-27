@@ -38,8 +38,6 @@ import java.util.List;
  */
 public final class DrawerListAdapter extends ArrayAdapter<ApplicationModel> {
 
-    /** The parent GridView. */
-    private final GridView parent;
     /** The resource id. */
     private final int resource;
 
@@ -57,7 +55,6 @@ public final class DrawerListAdapter extends ArrayAdapter<ApplicationModel> {
             final List<ApplicationModel> objects) {
 
         super(context, resource, objects);
-        this.parent = parent;
         this.resource = resource;
     }
 
