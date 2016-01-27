@@ -68,6 +68,10 @@ public final class HomeModel {
                     + "=? AND "
             + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME
                     + "=?";
+    /** Where statement for getting only enabled applications. */
+    public static final String WHERE =
+            ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
+                    + "=0";
 
     /** Database helper. */
     private final ApplicationUsageDbHelper dbHelper;
@@ -133,7 +137,7 @@ public final class HomeModel {
             Cursor c = null;
             try {
                 c = db.query(ApplicationUsageModel.ApplicationUsage.TABLE_NAME,
-                        COLUMNS, null, null, null, null,
+                        COLUMNS, WHERE, null, null, null,
                         ORDER_BY, Integer.toString(NUMBER_OF_APPS));
 
                 if (c != null) {
@@ -202,6 +206,7 @@ public final class HomeModel {
                 if (c.moveToFirst()) {
                     // update
                     final int usage = c.getInt(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE));
+
                     final ContentValues values = new ContentValues(3);
                     values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME, className);
                     values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME, packageName);
@@ -212,10 +217,11 @@ public final class HomeModel {
                     db.setTransactionSuccessful();
                 } else {
                     // insert
-                    final ContentValues values = new ContentValues(3);
+                    final ContentValues values = new ContentValues(4);
                     values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME, className);
                     values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME, packageName);
                     values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE, 1);
+                    values.put(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED, false);
 
                     db.insertOrThrow(ApplicationUsageModel.ApplicationUsage.TABLE_NAME, null, values);
                     db.setTransactionSuccessful();

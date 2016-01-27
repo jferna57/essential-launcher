@@ -41,6 +41,9 @@ public final class ApplicationUsageModel {
                     + COMMA + " "
                     + ApplicationUsage.COLUMN_NAME_USAGE + " "
                     + ApplicationUsage.COLUMN_TYPE_USAGE
+                    + COMMA + " "
+                    + ApplicationUsage.COLUMN_NAME_DISABLED + " "
+                    + ApplicationUsage.COLUMN_TYPE_DISABLED
             + ")";
     /** The drop SQL String. */
     public static final String DROP_SQL =
@@ -72,5 +75,9 @@ public final class ApplicationUsageModel {
         public static final String COLUMN_NAME_USAGE = "usage";
         /** Type of the column for usage. */
         public static final String COLUMN_TYPE_USAGE = "INTEGER";
+        /** Name of the column for disabled. */
+        public static final String COLUMN_NAME_DISABLED = "disabled";
+        /** Type of the column for disabled. */
+        public static final String COLUMN_TYPE_DISABLED = "BOOLEAN";
     }
 }
