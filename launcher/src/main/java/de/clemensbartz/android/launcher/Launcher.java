@@ -442,16 +442,14 @@ public final class Launcher extends Activity {
         } else {
             final Object tag = imageView.getTag();
 
-            if (tag != null) {
-                if (tag instanceof ApplicationModel) {
-                    final ApplicationModel tagModel = (ApplicationModel) tag;
+            if (tag instanceof ApplicationModel) {
+                final ApplicationModel tagModel = (ApplicationModel) tag;
 
-                    if (tagModel.getPackageName().equals(applicationModel.getPackageName())
-                            && tagModel.getClassName().equals(applicationModel.getClassName())
-                            && tagModel.getLabel().equals(applicationModel.getLabel())
-                    ) {
-                        return;
-                    }
+                if (tagModel.getPackageName().equals(applicationModel.getPackageName())
+                        && tagModel.getClassName().equals(applicationModel.getClassName())
+                        && tagModel.getLabel().equals(applicationModel.getLabel())
+                ) {
+                    return;
                 }
             }
 
