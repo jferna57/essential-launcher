@@ -24,4 +24,5 @@
   <string name="unassigned_dock">Vacío icono del dock</string>
   <string name="nowidgetset">Ningún widget. Mantén pulsade el cajón de aplicaciones que quieras seleccionar.</string>
   <string name="resetcounter">Restablecer contador</string>
+  <string name="showInDock">Espectáculo en el dock</string>
 </resources>

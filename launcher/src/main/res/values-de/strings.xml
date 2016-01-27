@@ -24,4 +24,5 @@
   <string name="unassigned_dock">Nicht zugewiesene Verknüpfung</string>
   <string name="uninstall">Deinstallieren</string>
   <string name="resetcounter">Zähler zurücksetzen</string>
+  <string name="showInDock">Im Dock anzeigen</string>
 </resources>
