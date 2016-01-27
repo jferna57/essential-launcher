@@ -150,6 +150,24 @@ public final class Launcher extends Activity {
                 return true;
             }
         });
+        for (final ImageView imageView : dockImageViews) {
+            imageView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+                @Override
+                public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                    if (view instanceof ImageView) {
+                        final ImageView contextImageView = (ImageView) view;
+
+                        if (contextImageView.getTag() instanceof ApplicationModel) {
+                            final ApplicationModel model = (ApplicationModel) contextImageView.getTag();
+
+                            contextMenu.setHeaderTitle(model.getLabel());
+                            final MenuItem item = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
+                            item.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
+                        }
+                    }
+                }
+            });
+        }
 
         lvApplications.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -171,15 +189,18 @@ public final class Launcher extends Activity {
                     final ContextMenu.ContextMenuInfo contextMenuInfo) {
 
                 final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
+                final ApplicationModel model = (ApplicationModel) applicationModels.get(info.position);
 
-                contextMenu.setHeaderTitle(applicationModels.get(info.position).getLabel());
-                contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
+                contextMenu.setHeaderTitle(model.getLabel());
+                final MenuItem itemAppInfo = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
+                itemAppInfo.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
 
                 // Check for system apps
                 try {
-                    ApplicationInfo ai = getPackageManager().getApplicationInfo(applicationModels.get(info.position).getPackageName(), 0);
+                    ApplicationInfo ai = getPackageManager().getApplicationInfo(model.getPackageName(), 0);
                     if ((ai.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) == 0) {
-                        contextMenu.add(0, ITEM_UNINSTALL, 1, R.string.uninstall);
+                        final MenuItem itemUninstall = contextMenu.add(0, ITEM_UNINSTALL, 1, R.string.uninstall);
+                        itemUninstall.setIntent(Launcher.uninstallAppIntent(model.getPackageName()));
                     }
                 } catch (PackageManager.NameNotFoundException e) {
 
@@ -259,21 +280,6 @@ public final class Launcher extends Activity {
                 createWidget(data);
             }
         }
-    }
-
-    @Override
-    public boolean onContextItemSelected(final MenuItem item) {
-        if (item.getItemId() == ITEM_APPINFO) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            startActivity(newAppDetailsIntent(applicationModels.get(info.position).getPackageName()));
-        } else if (item.getItemId() == ITEM_UNINSTALL) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            Intent intent = new Intent(Intent.ACTION_DELETE);
-            intent.setData(Uri.parse("package:" + applicationModels.get(info.position).getPackageName()));
-            startActivity(intent);
-        }
-
-        return true;
     }
 
     @Override
@@ -493,6 +499,18 @@ public final class Launcher extends Activity {
         intent.setClassName("com.android.settings",
                 "com.android.settings.InstalledAppDetails");
         intent.putExtra("com.android.settings.ApplicationPkgName", packageName);
+        return intent;
+    }
+
+    /**
+     * Intent to uninstall applications.
+     *
+     * @param packageName the package name of the application
+     * @return the intent to uninstall application.
+     */
+    public static Intent uninstallAppIntent(final String packageName) {
+        Intent intent = new Intent(Intent.ACTION_DELETE);
+        intent.setData(Uri.parse("package:" + packageName));
         return intent;
     }
 
