@@ -168,10 +168,12 @@ public final class Launcher extends Activity {
                             contextMenuApplicationModel = model;
 
                             contextMenu.setHeaderTitle(model.getLabel());
-                            final MenuItem item = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
-                            item.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
 
                             contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
+
+                            final MenuItem toggleDisabledItem = contextMenu.add(0, ITEM_TOGGLE_DISABLED, 0, R.string.showInDock);
+                            toggleDisabledItem.setCheckable(true);
+                            toggleDisabledItem.setChecked(!model.isDisabled());
                         }
                     }
                 }
@@ -204,6 +206,8 @@ public final class Launcher extends Activity {
                 contextMenu.setHeaderTitle(model.getLabel());
                 final MenuItem itemAppInfo = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
                 itemAppInfo.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
+
+                contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
 
                 final MenuItem toggleDisabledItem = contextMenu.add(0, ITEM_TOGGLE_DISABLED, 0, R.string.showInDock);
                 toggleDisabledItem.setCheckable(true);
