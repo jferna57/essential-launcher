@@ -16,11 +16,14 @@
   ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              tools:context=".Launcher" android:id="@+id/vsLauncher">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ViewSwitcher
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".Launcher" android:id="@+id/vsLauncher">
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="match_parent"
                   tools:context=".HomeActivity" android:baselineAligned="false"
@@ -136,5 +139,81 @@
                 android:smoothScrollbar="false"
                 android:paddingTop="10dp" android:paddingLeft="10dp"
                 android:paddingRight="10dp"/>
-    </LinearLayout>
-</ViewSwitcher>
+        </LinearLayout>
+    </ViewSwitcher>
+    <RelativeLayout
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ff3f3f3f"
+        android:clickable="true">
+
+        <GridLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:columnCount="1">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:src="@drawable/ic_view_module_white_48dp"
+                android:contentDescription="@string/open_drawer"
+                android:layout_rowSpan="2"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/drawer_short_press_description"
+                android:id="@+id/textView2"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/drawer_long_press_description"
+                android:id="@+id/textView3"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView2"
+                android:layout_rowSpan="2"
+                android:src="@drawable/ic_launcher"
+                android:contentDescription="@string/drawer_item_image"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/icon_short_press_description"
+                android:id="@+id/textView4"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/icon_long_press_description"
+                android:id="@+id/textView5"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ok"
+                android:id="@+id/btHideOverlay"
+                android:layout_gravity="center_horizontal" />
+        </GridLayout>
+    </RelativeLayout>
+</RelativeLayout>

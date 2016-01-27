@@ -26,4 +26,9 @@
     <string name="resetcounter">Reset counter</string>
     <string name="showInDock">Show in dock</string>
     <string name="drawer_item_image" translatable="false">Icon</string>
+    <string name="ok">OK</string>
+    <string name="drawer_short_press_description">Show all installed apps</string>
+    <string name="drawer_long_press_description">Long press: change widget</string>
+    <string name="icon_short_press_description">Dock: shows most used apps</string>
+    <string name="icon_long_press_description">Long press: reset counter or hide app (if assigned)</string>
 </resources>

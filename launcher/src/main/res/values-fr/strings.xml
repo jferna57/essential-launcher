@@ -25,4 +25,5 @@
   <string name="nowidgetset">Pas de Widget sélectionné. Appuyez de tiroir prolongée pour sélectionner widget.</string>
   <string name="resetcounter">Réinitialiser le compteur</string>
   <string name="showInDock">Spectacle au dock</string>
+  <string name="ok">OK</string>
 </resources>

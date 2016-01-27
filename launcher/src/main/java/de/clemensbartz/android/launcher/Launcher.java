@@ -45,9 +45,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.ViewSwitcher;
 import de.clemensbartz.android.launcher.adapters.DrawerListAdapter;
 import de.clemensbartz.android.launcher.models.ApplicationModel;
@@ -146,9 +148,20 @@ public final class Launcher extends Activity {
         dockImageViews.add((ImageView) findViewById(R.id.ivDock5));
         dockImageViews.add((ImageView) findViewById(R.id.ivDock6));
 
+        final Button btHideOverlay = (Button) findViewById(R.id.btHideOverlay);
+        final RelativeLayout overlay = (RelativeLayout) findViewById(R.id.overlay);
+
         /*
          * Set handlers.
          */
+        btHideOverlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                model.setHideOverlay();
+                overlay.setVisibility(View.GONE);
+            }
+        });
+
         ivDrawer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {
@@ -664,6 +677,8 @@ public final class Launcher extends Activity {
             if (integer > -1) {
                 addHostView(integer);
             }
+
+            findViewById(R.id.overlay).setVisibility((model.getHideOverlay()) ? View.GONE : View.VISIBLE);
         }
     }
 
