@@ -60,7 +60,7 @@ public final class ApplicationUsageModel {
     /**
      * Class for defining the table ApplicationUsage.
      */
-    public abstract class ApplicationUsage implements BaseColumns {
+    public static class ApplicationUsage implements BaseColumns {
         /** Table name. */
         public static final String TABLE_NAME = "ApplicationUsage";
         /** Name of the column for package name. */
