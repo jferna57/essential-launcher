@@ -424,6 +424,10 @@ public final class HomeModel {
         this.appWidgetId = appWidgetId;
     }
 
+    /**
+     *
+     * @return if the overlay should be hidden
+     */
     public boolean getHideOverlay() {
         return hideOverlay;
     }

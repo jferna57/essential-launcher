@@ -156,7 +156,7 @@ public final class Launcher extends Activity {
          */
         btHideOverlay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 model.setHideOverlay();
                 overlay.setVisibility(View.GONE);
             }
@@ -172,7 +172,7 @@ public final class Launcher extends Activity {
         for (final ImageView imageView : dockImageViews) {
             imageView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
-                public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                public void onCreateContextMenu(final ContextMenu contextMenu, final View view, final ContextMenu.ContextMenuInfo contextMenuInfo) {
                     if (view instanceof ImageView) {
                         final ImageView contextImageView = (ImageView) view;
 
@@ -322,6 +322,8 @@ public final class Launcher extends Activity {
                     break;
                 case ITEM_TOGGLE_DISABLED:
                     new ToggleDockAsyncTask().execute(contextMenuApplicationModel);
+                    break;
+                default:
                     break;
             }
 
@@ -591,7 +593,7 @@ public final class Launcher extends Activity {
      */
     private class ToggleDockAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
         @Override
-        protected Integer doInBackground(ApplicationModel... applicationModels) {
+        protected Integer doInBackground(final ApplicationModel... applicationModels) {
             for (ApplicationModel applicationModel : applicationModels) {
                 model.toggleDisabled(applicationModel.getPackageName(), applicationModel.getClassName());
             }
@@ -600,7 +602,7 @@ public final class Launcher extends Activity {
         }
 
         @Override
-        protected void onPostExecute(Integer integer) {
+        protected void onPostExecute(final Integer integer) {
             new LoadMostUsedAppsAsyncTask().execute();
             switchTo(HOME_ID);
         }
@@ -611,7 +613,7 @@ public final class Launcher extends Activity {
      */
     private class ResetUsageAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
         @Override
-        protected Integer doInBackground(ApplicationModel... applicationModels) {
+        protected Integer doInBackground(final ApplicationModel... applicationModels) {
             for (ApplicationModel applicationModel : applicationModels) {
                 model.resetUsage(applicationModel.getPackageName(), applicationModel.getClassName());
             }
@@ -620,7 +622,7 @@ public final class Launcher extends Activity {
         }
 
         @Override
-        protected void onPostExecute(Integer integer) {
+        protected void onPostExecute(final Integer integer) {
             new LoadMostUsedAppsAsyncTask().execute();
         }
     }

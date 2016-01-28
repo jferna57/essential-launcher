@@ -43,6 +43,7 @@ public final class ApplicationModel {
      * @param icon the icon
      * @param packageName the package name
      * @param className the class name
+     * @param disabled if the application is hidden from the dock
      */
     public ApplicationModel(
             final CharSequence label,
