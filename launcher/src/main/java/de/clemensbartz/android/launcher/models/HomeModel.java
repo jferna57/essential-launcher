@@ -40,8 +40,7 @@ import java.util.List;
  * @since 1.0
  */
 public final class HomeModel {
-    /** The tag for the log. */
-    public static final String TAG = "HomeModel";
+
     /** The total cached number of apps. */
     public static final int NUMBER_OF_APPS = 6;
     /** Constant for descending sorting. */
@@ -150,9 +149,9 @@ public final class HomeModel {
 
                 if (c != null) {
                     for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-                        String packageName = null;
-                        String className = null;
-                        boolean disabled = false;
+                        String packageName;
+                        String className;
+                        boolean disabled;
                         try {
                             packageName = c.getString(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME));
                             className = c.getString(c.getColumnIndexOrThrow(ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME));

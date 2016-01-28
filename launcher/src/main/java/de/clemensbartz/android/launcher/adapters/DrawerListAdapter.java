@@ -22,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import de.clemensbartz.android.launcher.R;
@@ -44,13 +43,11 @@ public final class DrawerListAdapter extends ArrayAdapter<ApplicationModel> {
     /**
      * Initializes a new adapter.
      * @param context the activity
-     * @param parent the parent control
      * @param resource the resource id
      * @param objects the list of application models
      */
     public DrawerListAdapter(
             final Context context,
-            final GridView parent,
             final int resource,
             final List<ApplicationModel> objects) {
 

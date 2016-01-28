@@ -67,10 +67,6 @@ import java.util.List;
  * @since 1.0
  */
 public final class Launcher extends Activity {
-    /** The TAG to identify the log messages of this class. */
-    protected static final String TAG = "Launcher";
-    /** The string for strict mode enabled. */
-    protected static final String STRICT_MODE_ENABLED = "Strict mode enabled";
 
     /** Id to identify the home layout. */
     protected static final int HOME_ID = 0;
@@ -213,7 +209,7 @@ public final class Launcher extends Activity {
                     final ContextMenu.ContextMenuInfo contextMenuInfo) {
 
                 final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
-                final ApplicationModel model = (ApplicationModel) applicationModels.get(info.position);
+                final ApplicationModel model = applicationModels.get(info.position);
                 contextMenuApplicationModel = model;
 
                 contextMenu.setHeaderTitle(model.getLabel());
@@ -259,7 +255,7 @@ public final class Launcher extends Activity {
         LayoutInflater.from(this).inflate(R.layout.home_empty, frWidget);
 
         // Initialize applications adapter and set it.
-        lvApplicationsAdapter = new DrawerListAdapter(this, lvApplications, R.layout.drawer_item, applicationModels);
+        lvApplicationsAdapter = new DrawerListAdapter(this, R.layout.drawer_item, applicationModels);
 
         lvApplications.setAdapter(lvApplicationsAdapter);
 
@@ -680,7 +676,11 @@ public final class Launcher extends Activity {
                 addHostView(integer);
             }
 
-            findViewById(R.id.overlay).setVisibility((model.getHideOverlay()) ? View.GONE : View.VISIBLE);
+            if (model.getHideOverlay()) {
+                findViewById(R.id.overlay).setVisibility(View.GONE);
+            } else {
+                findViewById(R.id.overlay).setVisibility(View.VISIBLE);
+            }
         }
     }
 
