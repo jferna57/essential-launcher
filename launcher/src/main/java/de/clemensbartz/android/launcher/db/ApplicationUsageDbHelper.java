@@ -42,16 +42,16 @@ public final class ApplicationUsageDbHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(final SQLiteDatabase db) {
-        db.execSQL(ApplicationUsageModel.CREATE_SQL);
+    public void onCreate(final SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL(ApplicationUsageModel.CREATE_SQL);
     }
 
     @Override
-    public void onUpgrade(final SQLiteDatabase db,
-                          final int oldVersion,
-                          final int newVersion) {
+    public void onUpgrade(final SQLiteDatabase sqLiteDatabase,
+                          final int i,
+                          final int i1) {
 
-        db.execSQL(ApplicationUsageModel.DROP_SQL);
-        onCreate(db);
+        sqLiteDatabase.execSQL(ApplicationUsageModel.DROP_SQL);
+        onCreate(sqLiteDatabase);
     }
 }

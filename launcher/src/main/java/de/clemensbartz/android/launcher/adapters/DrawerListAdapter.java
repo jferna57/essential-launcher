@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import de.clemensbartz.android.launcher.R;
 import de.clemensbartz.android.launcher.models.ApplicationModel;
+import de.clemensbartz.android.launcher.models.IApplicationModel;
 
 import java.util.List;
 
@@ -75,7 +76,7 @@ public final class DrawerListAdapter extends ArrayAdapter<ApplicationModel> {
             viewHolder = (ViewHolder) v.getTag();
         }
 
-        final ApplicationModel resolveInfo = getItem(position);
+        final IApplicationModel resolveInfo = getItem(position);
 
         if (resolveInfo != null && viewHolder != null) {
             viewHolder.icon.setContentDescription(resolveInfo.getLabel());

@@ -55,6 +55,7 @@ import de.clemensbartz.android.launcher.adapters.DrawerListAdapter;
 import de.clemensbartz.android.launcher.models.ApplicationModel;
 import de.clemensbartz.android.launcher.models.DockUpdateModel;
 import de.clemensbartz.android.launcher.models.HomeModel;
+import de.clemensbartz.android.launcher.models.IApplicationModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,22 +70,22 @@ import java.util.List;
 public final class Launcher extends Activity {
 
     /** Id to identify the home layout. */
-    protected static final int HOME_ID = 0;
+    static final int HOME_ID = 0;
     /** Id to identify the launcher layout. */
-    protected static final int DRAWER_ID = 1;
+    static final int DRAWER_ID = 1;
 
     /** Request code for picking a widget. */
-    protected static final int REQUEST_PICK_APPWIDGET = 0;
+    static final int REQUEST_PICK_APPWIDGET = 0;
     /** Request code for creating a widget. */
-    protected static final int REQUEST_CREATE_APPWIDGET = 1;
+    static final int REQUEST_CREATE_APPWIDGET = 1;
     /** Request code for app info. */
-    protected static final int ITEM_APPINFO = 1;
+    static final int ITEM_APPINFO = 1;
     /** Request code for app uninstall. */
-    protected static final int ITEM_UNINSTALL = 2;
+    static final int ITEM_UNINSTALL = 2;
     /** Request code for reset app counter. */
-    protected static final int ITEM_RESET = 3;
+    static final int ITEM_RESET = 3;
     /** Request code for toggle disabling app. */
-    protected static final int ITEM_TOGGLE_DISABLED = 4;
+    static final int ITEM_TOGGLE_DISABLED = 4;
 
     /** The view switcher of the launcher. */
     private ViewSwitcher vsLauncher;
@@ -102,11 +103,11 @@ public final class Launcher extends Activity {
     /** The adapter for applications. */
     private DrawerListAdapter lvApplicationsAdapter;
     /** The list of installed applications. */
-    private List<ApplicationModel> applicationModels = new ArrayList<>();
+    private List<ApplicationModel> applicationModels = new ArrayList<>(0);
     /** The broadcast receiver for package changes. */
     private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver = new PackageChangedBroadcastReceiver();
     /** The temporary application model for context menus. */
-    private ApplicationModel contextMenuApplicationModel;
+    private IApplicationModel contextMenuApplicationModel;
 
     /** The drawable for the launcher. */
     private Drawable icLauncher;
@@ -161,10 +162,22 @@ public final class Launcher extends Activity {
         ivDrawer.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(final View view) {
-                selectWidget();
+                final int appWidgetId = appWidgetHost.allocateAppWidgetId();
+
+                final Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
+                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, frWidget.getHeight());
+                pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, frWidget.getWidth());
+                pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN);
+                pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, new ArrayList<Parcelable>(0));
+                pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, new ArrayList<Parcelable>(0));
+
+                startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+
                 return true;
             }
         });
+
         for (final ImageView imageView : dockImageViews) {
             imageView.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
                 @Override
@@ -172,8 +185,8 @@ public final class Launcher extends Activity {
                     if (view instanceof ImageView) {
                         final ImageView contextImageView = (ImageView) view;
 
-                        if (contextImageView.getTag() instanceof ApplicationModel) {
-                            final ApplicationModel model = (ApplicationModel) contextImageView.getTag();
+                        if (contextImageView.getTag() instanceof IApplicationModel) {
+                            final IApplicationModel model = (IApplicationModel) contextImageView.getTag();
                             contextMenuApplicationModel = model;
 
                             contextMenu.setHeaderTitle(model.getLabel());
@@ -402,23 +415,6 @@ public final class Launcher extends Activity {
     }
 
     /**
-     * Trigger an intent to select a widget.
-     */
-    private void selectWidget() {
-        final int appWidgetId = appWidgetHost.allocateAppWidgetId();
-
-        final Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
-        pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, frWidget.getHeight());
-        pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, frWidget.getWidth());
-        pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN);
-        pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, new ArrayList<Parcelable>());
-        pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, new ArrayList<Parcelable>());
-
-        startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
-    }
-
-    /**
      * Create a widget from an intent.
      * @param intent the intent
      */
@@ -486,7 +482,7 @@ public final class Launcher extends Activity {
      * @param imageView the view
      * @param applicationModel the model, can be <code>null</code>
      */
-    private void updateDock(final ImageView imageView, final ApplicationModel applicationModel) {
+    private void updateDock(final ImageView imageView, final IApplicationModel applicationModel) {
         if (applicationModel == null) {
             if (imageView.getTag() != null) {
                 imageView.setTag(null);
@@ -497,8 +493,8 @@ public final class Launcher extends Activity {
         } else {
             final Object tag = imageView.getTag();
 
-            if (tag instanceof ApplicationModel) {
-                final ApplicationModel tagModel = (ApplicationModel) tag;
+            if (tag instanceof IApplicationModel) {
+                final IApplicationModel tagModel = (IApplicationModel) tag;
 
                 if (tagModel.getPackageName().equals(applicationModel.getPackageName())
                         && tagModel.getClassName().equals(applicationModel.getClassName())
@@ -578,7 +574,7 @@ public final class Launcher extends Activity {
      */
     private class CloseDatabaseAsyncTask extends AsyncTask<Integer, Integer, Integer> {
         @Override
-        protected Integer doInBackground(final Integer... chars) {
+        protected Integer doInBackground(final Integer... paramses) {
             model.close();
             return 0;
         }
@@ -587,10 +583,10 @@ public final class Launcher extends Activity {
     /**
      * Toggle dock visibility for an application.
      */
-    private class ToggleDockAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
+    private class ToggleDockAsyncTask extends AsyncTask<IApplicationModel, Integer, Integer> {
         @Override
-        protected Integer doInBackground(final ApplicationModel... applicationModels) {
-            for (ApplicationModel applicationModel : applicationModels) {
+        protected Integer doInBackground(final IApplicationModel... paramses) {
+            for (IApplicationModel applicationModel : paramses) {
                 model.toggleDisabled(applicationModel.getPackageName(), applicationModel.getClassName());
             }
 
@@ -598,7 +594,7 @@ public final class Launcher extends Activity {
         }
 
         @Override
-        protected void onPostExecute(final Integer integer) {
+        protected void onPostExecute(final Integer result) {
             new LoadMostUsedAppsAsyncTask().execute();
             switchTo(HOME_ID);
         }
@@ -607,10 +603,10 @@ public final class Launcher extends Activity {
     /**
      * Async for resetting the database.
      */
-    private class ResetUsageAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
+    private class ResetUsageAsyncTask extends AsyncTask<IApplicationModel, Integer, Integer> {
         @Override
-        protected Integer doInBackground(final ApplicationModel... applicationModels) {
-            for (ApplicationModel applicationModel : applicationModels) {
+        protected Integer doInBackground(final IApplicationModel... paramses) {
+            for (IApplicationModel applicationModel : paramses) {
                 model.resetUsage(applicationModel.getPackageName(), applicationModel.getClassName());
             }
 
@@ -618,7 +614,7 @@ public final class Launcher extends Activity {
         }
 
         @Override
-        protected void onPostExecute(final Integer integer) {
+        protected void onPostExecute(final Integer result) {
             new LoadMostUsedAppsAsyncTask().execute();
         }
     }
@@ -626,14 +622,14 @@ public final class Launcher extends Activity {
     /**
      * Async task for loading the most used applications.
      */
-    private class LoadMostUsedAppsAsyncTask extends AsyncTask<ApplicationModel, DockUpdateModel, Integer> {
+    private class LoadMostUsedAppsAsyncTask extends AsyncTask<IApplicationModel, DockUpdateModel, Integer> {
         @Override
-        protected Integer doInBackground(final ApplicationModel... applicationModels) {
-            for (ApplicationModel applicationModel : applicationModels) {
+        protected Integer doInBackground(final IApplicationModel... paramses) {
+            for (IApplicationModel applicationModel : paramses) {
                 model.addUsage(applicationModel.getPackageName(), applicationModel.getClassName());
             }
 
-            if (applicationModels.length == 0) {
+            if (paramses.length == 0) {
                 model.updateApplications();
             }
 
@@ -663,17 +659,17 @@ public final class Launcher extends Activity {
      */
     private class LoadModelAsyncTask extends AsyncTask<Integer, Integer, Integer> {
         @Override
-        protected Integer doInBackground(final Integer... integers) {
+        protected Integer doInBackground(final Integer... params) {
             model.loadValues();
 
             return model.getAppWidgetId();
         }
 
         @Override
-        protected void onPostExecute(final Integer integer) {
+        protected void onPostExecute(final Integer result) {
             // Show last selected widget.
-            if (integer > -1) {
-                addHostView(integer);
+            if (result > -1) {
+                addHostView(result);
             }
 
             if (model.getHideOverlay()) {
@@ -693,7 +689,7 @@ public final class Launcher extends Activity {
         protected static final int REFRESH_NUMBER = 5;
 
         @Override
-        protected Integer doInBackground(final Integer... integers) {
+        protected Integer doInBackground(final Integer... paramses) {
             final Intent intent = new Intent();
             intent.setAction(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -721,7 +717,7 @@ public final class Launcher extends Activity {
         }
 
         @Override
-        protected void onPostExecute(final Integer integer) {
+        protected void onPostExecute(final Integer result) {
             lvApplicationsAdapter.notifyDataSetChanged();
         }
 

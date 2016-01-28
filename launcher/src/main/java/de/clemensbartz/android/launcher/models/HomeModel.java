@@ -46,7 +46,7 @@ public final class HomeModel {
     /** Constant for descending sorting. */
     public static final String _DESC = " DESC";
     /** Columns of ApplicationUsage. */
-    public static final String[] COLUMNS = {
+    static final String[] COLUMNS = {
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE,

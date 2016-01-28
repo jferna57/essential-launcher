@@ -25,7 +25,7 @@ import android.graphics.drawable.Drawable;
  * @author Clemens Bartz
  * @since 1.0
  */
-public final class ApplicationModel {
+public final class ApplicationModel implements IApplicationModel {
     /** The localized label. */
     private final CharSequence label;
     /** The icon. */
@@ -59,48 +59,33 @@ public final class ApplicationModel {
         this.disabled = disabled;
     }
 
-    /**
-     *
-     * @return the label
-     */
+    @Override
     public CharSequence getLabel() {
         return label;
     }
 
-    /**
-     *
-     * @return the icon
-     */
+    @Override
     public Drawable getIcon() {
         return icon;
     }
 
-    /**
-     *
-     * @return the package name
-     */
+    @Override
     public String getPackageName() {
         return packageName;
     }
 
-    /**
-     *
-     * @return the class name
-     */
+    @Override
     public String getClassName() {
         return className;
     }
 
-    /**
-     *
-     * @return if the app is disabled in the dock
-     */
+    @Override
     public boolean isDisabled() {
         return disabled;
     }
 
     @Override
     public String toString() {
-        return getClassName();
+        return className;
     }
 }
