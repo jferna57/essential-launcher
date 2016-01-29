@@ -633,7 +633,7 @@ public final class Launcher extends Activity {
                 model.updateApplications();
             }
 
-            final List<ApplicationModel> mostUsedApplications = model.getMostUsedApplications();
+            final List<IApplicationModel> mostUsedApplications = model.getMostUsedApplications();
 
             for (int i = 0; i < dockImageViews.size(); i++) {
                 if (i >= mostUsedApplications.size()) {

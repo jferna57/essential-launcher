@@ -39,7 +39,7 @@ import java.util.List;
  * @author Clemens Bartz
  * @since 1.0
  */
-public final class HomeModel {
+public final class HomeModel implements IHomeModel {
 
     /** The total cached number of apps. */
     public static final int NUMBER_OF_APPS = 6;
@@ -93,7 +93,7 @@ public final class HomeModel {
     private boolean hideOverlay = false;
 
     /** Cache for most used applications. */
-    private List<ApplicationModel> mostUsedApplications =
+    private List<IApplicationModel> mostUsedApplications =
             new ArrayList<>(NUMBER_OF_APPS);
 
     /**
@@ -106,11 +106,7 @@ public final class HomeModel {
         pm = context.getPackageManager();
     }
 
-    /**
-     * Load all model values, including basic preferences and applications.
-     * <p/>
-     * This method has to be called from an async task.
-     */
+    @Override
     public void loadValues() {
         updateApplications();
 
@@ -118,11 +114,8 @@ public final class HomeModel {
         hideOverlay = preferences.getBoolean(KEY_HIDE_OVERLAY_ID, false);
     }
 
-    /**
-     *
-     * @return the most used applications as an unmodifiable list
-     */
-    public List<ApplicationModel> getMostUsedApplications() {
+    @Override
+    public List<IApplicationModel> getMostUsedApplications() {
         return Collections.unmodifiableList(mostUsedApplications);
     }
 
@@ -186,12 +179,7 @@ public final class HomeModel {
         } while (!success);
     }
 
-    /**
-     * Toggle disabled state of an application.
-     *
-     * @param packageName the package name of the app
-     * @param className the class name of the app
-     */
+    @Override
     public void toggleDisabled(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -240,13 +228,7 @@ public final class HomeModel {
         }
     }
 
-    /**
-     * Determines if an application is disabled.
-     *
-     * @param packageName the package name of the app
-     * @param className the class name of the app
-     * @return if it is disabled
-     */
+    @Override
     public boolean isDisabled(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -280,12 +262,7 @@ public final class HomeModel {
         return disabled;
     }
 
-    /**
-     * Reset usage to 0 for package and class.
-     *
-     * @param packageName the package name
-     * @param className the class name
-     */
+    @Override
     public void resetUsage(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -335,15 +312,7 @@ public final class HomeModel {
         updateApplications();
     }
 
-    /**
-     * Add one usage counter for the package and class name.
-     * Also updates the internal list.
-     * <p/>
-     * This method has to be called from an async task.
-     *
-     * @param packageName the package name
-     * @param className the class name
-     */
+    @Override
     public void addUsage(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -406,42 +375,29 @@ public final class HomeModel {
                 SELECTION, new String[]{packageName, className});
     }
 
-    /**
-     *
-     * @return the app widget id
-     */
+    @Override
     public int getAppWidgetId() {
         return appWidgetId;
     }
 
-    /**
-     * Set the new app widget id.
-     * @param appWidgetId the app widget id
-     */
+    @Override
     public void setAppWidgetId(final int appWidgetId) {
         preferences.edit().putInt(KEY_APPWIDGET_ID, appWidgetId).apply();
         this.appWidgetId = appWidgetId;
     }
 
-    /**
-     *
-     * @return if the overlay should be hidden
-     */
+    @Override
     public boolean getHideOverlay() {
         return hideOverlay;
     }
 
-    /**
-     * Set to hide the overlay permanently.
-     */
+    @Override
     public void setHideOverlay() {
         preferences.edit().putBoolean(KEY_HIDE_OVERLAY_ID, true).apply();
         this.hideOverlay = true;
     }
 
-    /**
-     * Close all used databases.
-     */
+    @Override
     public void close() {
         if (dbHelper.getWritableDatabase().isOpen()) {
             dbHelper.getWritableDatabase().close();
