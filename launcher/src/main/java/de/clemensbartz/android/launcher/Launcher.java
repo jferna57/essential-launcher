@@ -228,7 +228,7 @@ public final class Launcher extends Activity {
 
                 contextMenu.setHeaderTitle(model.getLabel());
                 final MenuItem itemAppInfo = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
-                itemAppInfo.setIntent(Launcher.newAppDetailsIntent(model.getPackageName()));
+                itemAppInfo.setIntent(IntentUtil.newAppDetailsIntent(model.getPackageName()));
 
                 contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
 
@@ -241,7 +241,7 @@ public final class Launcher extends Activity {
                     ApplicationInfo ai = getPackageManager().getApplicationInfo(model.getPackageName(), 0);
                     if ((ai.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) == 0) {
                         final MenuItem itemUninstall = contextMenu.add(0, ITEM_UNINSTALL, 1, R.string.uninstall);
-                        itemUninstall.setIntent(Launcher.uninstallAppIntent(model.getPackageName()));
+                        itemUninstall.setIntent(IntentUtil.uninstallAppIntent(model.getPackageName()));
                     }
                 } catch (PackageManager.NameNotFoundException e) {
 
@@ -518,46 +518,6 @@ public final class Launcher extends Activity {
             });
             imageView.setContentDescription(applicationModel.getLabel());
         }
-    }
-
-    /**
-     * <p>Intent to show an applications details page in (Settings) com.android.settings.</p>
-     *
-     * @param packageName   The package name of the application
-     * @return the intent to open the application info screen.
-     */
-    public static Intent newAppDetailsIntent(final String packageName) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-            final Intent intent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setData(Uri.parse("package:" + packageName));
-            return intent;
-        } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.FROYO) {
-            final Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.setClassName("com.android.settings",
-                    "com.android.settings.InstalledAppDetails");
-            intent.putExtra("pkg", packageName);
-            return intent;
-        }
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setClassName("com.android.settings",
-                "com.android.settings.InstalledAppDetails");
-        intent.putExtra("com.android.settings.ApplicationPkgName", packageName);
-        return intent;
-    }
-
-    /**
-     * Intent to uninstall applications.
-     *
-     * @param packageName the package name of the application
-     * @return the intent to uninstall application.
-     */
-    public static Intent uninstallAppIntent(final String packageName) {
-        Intent intent = new Intent(Intent.ACTION_DELETE);
-        intent.setData(Uri.parse("package:" + packageName));
-        return intent;
     }
 
     /**
