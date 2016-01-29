@@ -56,6 +56,7 @@ import de.clemensbartz.android.launcher.models.ApplicationModel;
 import de.clemensbartz.android.launcher.models.DockUpdateModel;
 import de.clemensbartz.android.launcher.models.HomeModel;
 import de.clemensbartz.android.launcher.models.IApplicationModel;
+import de.clemensbartz.android.launcher.receivers.PackageChangedBroadcastReceiver;
 import de.clemensbartz.android.launcher.tasks.CloseDatabaseAsyncTask;
 
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ import java.util.List;
  * @author Clemens Bartz
  * @since 1.0
  */
-public final class Launcher extends Activity {
+public final class Launcher extends Activity implements ILauncher {
 
     /** Id to identify the home layout. */
     static final int HOME_ID = 0;
@@ -106,12 +107,19 @@ public final class Launcher extends Activity {
     /** The list of installed applications. */
     private List<ApplicationModel> applicationModels = new ArrayList<>(0);
     /** The broadcast receiver for package changes. */
-    private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver = new PackageChangedBroadcastReceiver();
+    private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver;
     /** The temporary application model for context menus. */
     private IApplicationModel contextMenuApplicationModel;
 
     /** The drawable for the launcher. */
     private Drawable icLauncher;
+
+    /**
+     * Create a new Launcher instance.
+     */
+    public Launcher() {
+        packageChangedBroadcastReceiver = new PackageChangedBroadcastReceiver(this);
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -453,10 +461,8 @@ public final class Launcher extends Activity {
         }
     }
 
-    /**
-     * Update installed applications.
-     */
-    private void updateApplications() {
+    @Override
+    public void updateApplications() {
         new UpdateAsyncTask().execute();
     }
 
@@ -517,16 +523,6 @@ public final class Launcher extends Activity {
                 }
             });
             imageView.setContentDescription(applicationModel.getLabel());
-        }
-    }
-
-    /**
-     * Broadcast receiver for package change.
-     */
-    private final class PackageChangedBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            updateApplications();
         }
     }
 
