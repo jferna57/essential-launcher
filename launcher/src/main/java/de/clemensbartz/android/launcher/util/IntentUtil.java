@@ -15,7 +15,7 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.clemensbartz.android.launcher;
+package de.clemensbartz.android.launcher.util;
 
 import android.content.Intent;
 import android.net.Uri;
