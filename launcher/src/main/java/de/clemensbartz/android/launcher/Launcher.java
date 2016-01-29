@@ -56,6 +56,7 @@ import de.clemensbartz.android.launcher.models.ApplicationModel;
 import de.clemensbartz.android.launcher.models.DockUpdateModel;
 import de.clemensbartz.android.launcher.models.HomeModel;
 import de.clemensbartz.android.launcher.models.IApplicationModel;
+import de.clemensbartz.android.launcher.tasks.CloseDatabaseAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -566,17 +567,6 @@ public final class Launcher extends Activity {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             updateApplications();
-        }
-    }
-
-    /**
-     * Async task for closing the database.
-     */
-    private class CloseDatabaseAsyncTask extends AsyncTask<Integer, Integer, Integer> {
-        @Override
-        protected Integer doInBackground(final Integer... paramses) {
-            model.close();
-            return 0;
         }
     }
 
