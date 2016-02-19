@@ -228,25 +228,25 @@ public final class Launcher extends Activity implements ILauncher {
                     final ContextMenu.ContextMenuInfo contextMenuInfo) {
 
                 final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
-                final ApplicationModel model = applicationModels.get(info.position);
-                contextMenuApplicationModel = model;
+                final IApplicationModel applicationModel = applicationModels.get(info.position);
+                contextMenuApplicationModel = applicationModel;
 
-                contextMenu.setHeaderTitle(model.getLabel());
+                contextMenu.setHeaderTitle(applicationModel.getLabel());
                 final MenuItem itemAppInfo = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
-                itemAppInfo.setIntent(IntentUtil.newAppDetailsIntent(model.getPackageName()));
+                itemAppInfo.setIntent(IntentUtil.newAppDetailsIntent(applicationModel.getPackageName()));
 
                 contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
 
                 final MenuItem toggleDisabledItem = contextMenu.add(0, ITEM_TOGGLE_DISABLED, 0, R.string.showInDock);
                 toggleDisabledItem.setCheckable(true);
-                toggleDisabledItem.setChecked(!model.isDisabled());
+                toggleDisabledItem.setChecked(!applicationModel.isDisabled());
 
                 // Check for system apps
                 try {
-                    ApplicationInfo ai = getPackageManager().getApplicationInfo(model.getPackageName(), 0);
+                    ApplicationInfo ai = getPackageManager().getApplicationInfo(applicationModel.getPackageName(), 0);
                     if ((ai.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) == 0) {
                         final MenuItem itemUninstall = contextMenu.add(0, ITEM_UNINSTALL, 1, R.string.uninstall);
-                        itemUninstall.setIntent(IntentUtil.uninstallAppIntent(model.getPackageName()));
+                        itemUninstall.setIntent(IntentUtil.uninstallAppIntent(applicationModel.getPackageName()));
                     }
                 } catch (PackageManager.NameNotFoundException e) {
 
@@ -284,14 +284,14 @@ public final class Launcher extends Activity implements ILauncher {
 
     @Override
     public void onBackPressed() {
-        switchTo(HOME_ID);
+        hasSwitchedTo(HOME_ID);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        switchTo(HOME_ID);
+        hasSwitchedTo(HOME_ID);
 
         updateDock();
     }
@@ -361,7 +361,7 @@ public final class Launcher extends Activity implements ILauncher {
      * Open an app from the model.
      * @param applicationModel the model
      */
-    public void openApp(final ApplicationModel applicationModel) {
+    public void openApp(final IApplicationModel applicationModel) {
         new LoadMostUsedAppsAsyncTask().execute(applicationModel);
 
         final ComponentName component = new ComponentName(applicationModel.getPackageName(), applicationModel.getClassName());
@@ -376,7 +376,7 @@ public final class Launcher extends Activity implements ILauncher {
      * @param view the originating view
      */
     public void openDrawer(final View view) {
-        switchTo(DRAWER_ID);
+        hasSwitchedTo(DRAWER_ID);
     }
 
     /**
@@ -385,7 +385,7 @@ public final class Launcher extends Activity implements ILauncher {
      * @param id the id of the layout
      * @return if the layout has been switched
      */
-    private boolean switchTo(final int id) {
+    private boolean hasSwitchedTo(final int id) {
         switch (vsLauncher.getDisplayedChild()) {
             case HOME_ID:
                 if (id == DRAWER_ID) {
@@ -539,7 +539,7 @@ public final class Launcher extends Activity implements ILauncher {
         @Override
         protected void onPostExecute(final Integer result) {
             new LoadMostUsedAppsAsyncTask().execute();
-            switchTo(HOME_ID);
+            hasSwitchedTo(HOME_ID);
         }
     }
 
