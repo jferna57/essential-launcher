@@ -69,22 +69,22 @@ import java.util.List;
 public final class Launcher extends Activity implements ILauncher {
 
     /** Id to identify the home layout. */
-    static final int HOME_ID = 0;
+    private static final int HOME_ID = 0;
     /** Id to identify the launcher layout. */
-    static final int DRAWER_ID = 1;
+    private static final int DRAWER_ID = 1;
 
     /** Request code for picking a widget. */
-    static final int REQUEST_PICK_APPWIDGET = 0;
+    private static final int REQUEST_PICK_APPWIDGET = 0;
     /** Request code for creating a widget. */
-    static final int REQUEST_CREATE_APPWIDGET = 1;
+    private static final int REQUEST_CREATE_APPWIDGET = 1;
     /** Request code for app info. */
-    static final int ITEM_APPINFO = 1;
+    private static final int ITEM_APPINFO = 1;
     /** Request code for app uninstall. */
-    static final int ITEM_UNINSTALL = 2;
+    private static final int ITEM_UNINSTALL = 2;
     /** Request code for reset app counter. */
-    static final int ITEM_RESET = 3;
+    private static final int ITEM_RESET = 3;
     /** Request code for toggle disabling app. */
-    static final int ITEM_TOGGLE_DISABLED = 4;
+    private static final int ITEM_TOGGLE_DISABLED = 4;
 
     /** The view switcher of the launcher. */
     private ViewSwitcher vsLauncher;

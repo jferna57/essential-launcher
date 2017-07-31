@@ -44,16 +44,16 @@ public final class HomeModel implements IHomeModel {
     /** The total cached number of apps. */
     public static final int NUMBER_OF_APPS = 6;
     /** Constant for descending sorting. */
-    public static final String _DESC = " DESC";
+    private static final String _DESC = " DESC";
     /** Columns of ApplicationUsage. */
-    static final String[] COLUMNS = {
+    private static final String[] COLUMNS = {
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE,
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
     };
     /** Order by usage DESC, package name DESC, class name DESC constant. */
-    public static final String ORDER_BY =
+    private static final String ORDER_BY =
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
                     + _DESC
             + ", "
@@ -63,13 +63,13 @@ public final class HomeModel implements IHomeModel {
             + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME
                     + _DESC;
     /** Filter for package name and class name constant. */
-    public static final String SELECTION =
+    private static final String SELECTION =
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_PACKAGE_NAME
                     + "=? AND "
             + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_CLASS_NAME
                     + "=?";
     /** Where statement for getting only enabled applications. */
-    public static final String WHERE =
+    private static final String WHERE =
             ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_DISABLED
                     + "=0 AND "
             + ApplicationUsageModel.ApplicationUsage.COLUMN_NAME_USAGE
