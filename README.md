@@ -1,7 +1,7 @@
 # Essential Launcher
 
 [![Build Status](https://travis-ci.org/clemensbartz/essential-launcher.svg?branch=release%2Fv1.0)](https://travis-ci.org/clemensbartz/essential-launcher)
-[![Codacy Badge](https://api.codacy.com/project/badge/grade/1e17dc4e83d748a7bf35231ed7fa9528)](https://www.codacy.com/app/clemens-bartz/essential-launcher)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/1e17dc4e83d748a7bf35231ed7fa9528)](https://www.codacy.com/app/clemensbartz/essential-launcher?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=clemensbartz/essential-launcher&amp;utm_campaign=Badge_Grade)
 
 ## Overview
 
