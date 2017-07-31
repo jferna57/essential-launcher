@@ -31,4 +31,6 @@
     <string name="drawer_long_press_description">Long press: change widget</string>
     <string name="icon_short_press_description">Dock: shows most used apps</string>
     <string name="icon_long_press_description">Long press: reset counter or hide app (if assigned)</string>
+    <string name="remove_widget">Remove widget</string>
+    <string name="choose_widget">Choose widget</string>
 </resources>

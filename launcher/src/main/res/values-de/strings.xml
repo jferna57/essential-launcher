@@ -30,4 +30,6 @@
   <string name="drawer_short_press_description">Alle Apps anzeigen</string>
   <string name="icon_long_press_description">Gedrückt halten: Zähler zurücksetzen oder App ausblenden</string>
   <string name="icon_short_press_description">Dock: meistgenutzte Apps anzeigen</string>
+  <string name="remove_widget">Widget entfernen</string>
+  <string name="choose_widget">Widget wählen</string>
 </resources>

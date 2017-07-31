@@ -85,6 +85,10 @@ public final class Launcher extends Activity implements ILauncher {
     private static final int ITEM_RESET = 3;
     /** Request code for toggle disabling app. */
     private static final int ITEM_TOGGLE_DISABLED = 4;
+    /** Request code for removing the widget. */
+    private static final int ITEM_REMOVE_WIDGET = 5;
+    /** Request code for choosing widget. */
+    private static final int ITEM_CHOOSE_WIDGET = 6;
 
     /** The view switcher of the launcher. */
     private ViewSwitcher vsLauncher;
@@ -165,22 +169,11 @@ public final class Launcher extends Activity implements ILauncher {
             }
         });
 
-        ivDrawer.setOnLongClickListener(new View.OnLongClickListener() {
+        ivDrawer.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
             @Override
-            public boolean onLongClick(final View view) {
-                final int appWidgetId = appWidgetHost.allocateAppWidgetId();
-
-                final Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
-                pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-                pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, frWidget.getHeight());
-                pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, frWidget.getWidth());
-                pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN);
-                pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, new ArrayList<Parcelable>(0));
-                pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, new ArrayList<Parcelable>(0));
-
-                startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
-
-                return true;
+            public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+                contextMenu.add(0, ITEM_CHOOSE_WIDGET, 0, R.string.choose_widget);
+                contextMenu.add(0, ITEM_REMOVE_WIDGET, 0, R.string.remove_widget);
             }
         });
 
@@ -270,9 +263,6 @@ public final class Launcher extends Activity implements ILauncher {
         appWidgetHost = new AppWidgetHost(this, R.id.frWidget);
         appWidgetHost.startListening();
 
-        // Load last widget lazily.
-        LayoutInflater.from(this).inflate(R.layout.home_empty, frWidget);
-
         // Initialize applications adapter and set it.
         lvApplicationsAdapter = new DrawerListAdapter(this, R.layout.drawer_item, applicationModels);
 
@@ -345,6 +335,27 @@ public final class Launcher extends Activity implements ILauncher {
             // "Consume" the model
             contextMenuApplicationModel = null;
             return true;
+        } else {
+            switch (item.getItemId()) {
+
+                case ITEM_REMOVE_WIDGET:
+                    createWidget(new Intent());
+                    break;
+                case ITEM_CHOOSE_WIDGET:
+                    final int appWidgetId = appWidgetHost.allocateAppWidgetId();
+
+                    final Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
+                    pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+                    pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, frWidget.getHeight());
+                    pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, frWidget.getWidth());
+                    pickIntent.putExtra(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, AppWidgetProviderInfo.WIDGET_CATEGORY_HOME_SCREEN);
+                    pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_EXTRAS, new ArrayList<Parcelable>(0));
+                    pickIntent.putParcelableArrayListExtra(AppWidgetManager.EXTRA_CUSTOM_INFO, new ArrayList<Parcelable>(0));
+
+                    startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
+
+                    break;
+            }
         }
 
         return false;
@@ -425,16 +436,20 @@ public final class Launcher extends Activity implements ILauncher {
      * @param intent the intent
      */
     private void createWidget(final Intent intent) {
-        final Bundle extras = intent.getExtras();
-
         if (model.getAppWidgetId() > -1) {
             appWidgetHost.deleteAppWidgetId(model.getAppWidgetId());
             frWidget.removeAllViews();
         }
 
-        final int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-        model.setAppWidgetId(appWidgetId);
+        final Bundle extras = intent.getExtras();
 
+        int appWidgetId = -1;
+
+        if (extras != null) {
+            appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+        }
+
+        model.setAppWidgetId(appWidgetId);
         addHostView(appWidgetId);
     }
 
@@ -453,8 +468,6 @@ public final class Launcher extends Activity implements ILauncher {
             frWidget.addView(hostView);
         } else {
             model.setAppWidgetId(-1);
-
-            LayoutInflater.from(this).inflate(R.layout.home_empty, frWidget);
         }
     }
 
