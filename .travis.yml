@@ -2,8 +2,13 @@ language: android
 jdk: oraclejdk8
 android:
   components:
-    - android-22
-    - build-tools-25.0.0
+      - tools
+      - platform-tools
+      - tools
+
+      - android-22
+      
+      - build-tools-25.0.0
 script:
   # By default Travis-ci executes './gradlew build connectedCheck' if no 'script:' section found.
   - ./gradlew build
