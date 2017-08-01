@@ -24,11 +24,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
+
 import de.clemensbartz.android.launcher.R;
 import de.clemensbartz.android.launcher.models.ApplicationModel;
 import de.clemensbartz.android.launcher.models.IApplicationModel;
-
-import java.util.List;
 
 /**
  * Array adapter for the drawer. Takes an @{ApplicationModel}.

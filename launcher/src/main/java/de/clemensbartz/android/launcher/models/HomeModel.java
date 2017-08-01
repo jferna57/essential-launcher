@@ -26,12 +26,13 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import de.clemensbartz.android.launcher.db.ApplicationUsageDbHelper;
-import de.clemensbartz.android.launcher.db.ApplicationUsageModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import de.clemensbartz.android.launcher.db.ApplicationUsageDbHelper;
+import de.clemensbartz.android.launcher.db.ApplicationUsageModel;
 
 /**
  * Model class for HomeActivity.

@@ -20,6 +20,7 @@ package de.clemensbartz.android.launcher.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
 import de.clemensbartz.android.launcher.ILauncher;
 
 /**
