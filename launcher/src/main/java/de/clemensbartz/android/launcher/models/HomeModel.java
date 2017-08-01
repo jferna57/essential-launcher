@@ -157,7 +157,13 @@ public final class HomeModel {
                             if (!info.enabled) {
                                 delete(packageName, className);
                             }
-                            final ApplicationModel applicationModel = new ApplicationModel(info.loadLabel(pm), info.loadIcon(pm), packageName, className, disabled);
+                            final ApplicationModel applicationModel = new ApplicationModel();
+                            applicationModel.label = info.loadLabel(pm);
+                            applicationModel.icon = info.loadIcon(pm);
+                            applicationModel.packageName = packageName;
+                            applicationModel.className = className;
+                            applicationModel.disabled = disabled;
+
                             mostUsedApplications.add(applicationModel);
                         } catch (PackageManager.NameNotFoundException e) {
                             if (packageName != null && className != null) {

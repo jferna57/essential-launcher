@@ -27,59 +27,13 @@ import android.graphics.drawable.Drawable;
  */
 public final class ApplicationModel {
     /** The localized label. */
-    private final CharSequence label;
+    public CharSequence label;
     /** The icon. */
-    private final Drawable icon;
+    public Drawable icon;
     /** The package name. */
-    private final String packageName;
+    public String packageName;
     /** The full class name. */
-    private final String className;
+    public String className;
     /** The disabled flag. */
-    private final boolean disabled;
-
-    /**
-     * Create a new application.
-     * @param label the label
-     * @param icon the icon
-     * @param packageName the package name
-     * @param className the class name
-     * @param disabled if the application is hidden from the dock
-     */
-    public ApplicationModel(
-            final CharSequence label,
-            final Drawable icon,
-            final String packageName,
-            final String className,
-            final boolean disabled) {
-
-        this.label = label;
-        this.icon = icon;
-        this.packageName = packageName;
-        this.className = className;
-        this.disabled = disabled;
-    }
-
-    public CharSequence getLabel() {
-        return label;
-    }
-
-    public Drawable getIcon() {
-        return icon;
-    }
-
-    public String getPackageName() {
-        return packageName;
-    }
-
-    public String getClassName() {
-        return className;
-    }
-
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    public String toString() {
-        return className;
-    }
+    public boolean disabled;
 }

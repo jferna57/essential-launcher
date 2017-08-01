@@ -79,9 +79,9 @@ public final class DrawerListAdapter extends ArrayAdapter<ApplicationModel> {
         final ApplicationModel resolveInfo = getItem(position);
 
         if (resolveInfo != null && viewHolder != null) {
-            viewHolder.icon.setContentDescription(resolveInfo.getLabel());
-            viewHolder.icon.setImageDrawable(resolveInfo.getIcon());
-            viewHolder.name.setText(resolveInfo.getLabel());
+            viewHolder.icon.setContentDescription(resolveInfo.label);
+            viewHolder.icon.setImageDrawable(resolveInfo.icon);
+            viewHolder.name.setText(resolveInfo.label);
         }
 
         return v;

@@ -180,13 +180,13 @@ public final class Launcher extends Activity {
                             final ApplicationModel model = (ApplicationModel) contextImageView.getTag();
                             contextMenuApplicationModel = model;
 
-                            contextMenu.setHeaderTitle(model.getLabel());
+                            contextMenu.setHeaderTitle(model.label);
 
                             contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
 
                             final MenuItem toggleDisabledItem = contextMenu.add(0, ITEM_TOGGLE_DISABLED, 0, R.string.showInDock);
                             toggleDisabledItem.setCheckable(true);
-                            toggleDisabledItem.setChecked(!model.isDisabled());
+                            toggleDisabledItem.setChecked(!model.disabled);
                         }
                     }
                 }
@@ -216,22 +216,22 @@ public final class Launcher extends Activity {
                 final ApplicationModel applicationModel = applicationModels.get(info.position);
                 contextMenuApplicationModel = applicationModel;
 
-                contextMenu.setHeaderTitle(applicationModel.getLabel());
+                contextMenu.setHeaderTitle(applicationModel.label);
                 final MenuItem itemAppInfo = contextMenu.add(0, ITEM_APPINFO, 0, R.string.appinfo);
-                itemAppInfo.setIntent(IntentUtil.newAppDetailsIntent(applicationModel.getPackageName()));
+                itemAppInfo.setIntent(IntentUtil.newAppDetailsIntent(applicationModel.packageName));
 
                 contextMenu.add(0, ITEM_RESET, 0, R.string.resetcounter);
 
                 final MenuItem toggleDisabledItem = contextMenu.add(0, ITEM_TOGGLE_DISABLED, 0, R.string.showInDock);
                 toggleDisabledItem.setCheckable(true);
-                toggleDisabledItem.setChecked(!applicationModel.isDisabled());
+                toggleDisabledItem.setChecked(!applicationModel.disabled);
 
                 // Check for system apps
                 try {
-                    ApplicationInfo ai = getPackageManager().getApplicationInfo(applicationModel.getPackageName(), 0);
+                    ApplicationInfo ai = getPackageManager().getApplicationInfo(applicationModel.packageName, 0);
                     if ((ai.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) == 0) {
                         final MenuItem itemUninstall = contextMenu.add(0, ITEM_UNINSTALL, 1, R.string.uninstall);
-                        itemUninstall.setIntent(IntentUtil.uninstallAppIntent(applicationModel.getPackageName()));
+                        itemUninstall.setIntent(IntentUtil.uninstallAppIntent(applicationModel.packageName));
                     }
                 } catch (PackageManager.NameNotFoundException e) {
 
@@ -367,7 +367,7 @@ public final class Launcher extends Activity {
     public void openApp(final ApplicationModel applicationModel) {
         new LoadMostUsedAppsAsyncTask().execute(applicationModel);
 
-        final ComponentName component = new ComponentName(applicationModel.getPackageName(), applicationModel.getClassName());
+        final ComponentName component = new ComponentName(applicationModel.packageName, applicationModel.className);
         final Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setComponent(component);
 
@@ -504,15 +504,15 @@ public final class Launcher extends Activity {
             if (tag instanceof ApplicationModel) {
                 final ApplicationModel tagModel = (ApplicationModel) tag;
 
-                if (tagModel.getPackageName().equals(applicationModel.getPackageName())
-                        && tagModel.getClassName().equals(applicationModel.getClassName())
-                        && tagModel.getLabel().equals(applicationModel.getLabel())
+                if (tagModel.packageName.equals(applicationModel.packageName)
+                        && tagModel.className.equals(applicationModel.className)
+                        && tagModel.label.equals(applicationModel.label)
                 ) {
                     return;
                 }
             }
 
-            final RippleDrawable rd = new RippleDrawable(ColorStateList.valueOf(Color.GRAY), applicationModel.getIcon(), null);
+            final RippleDrawable rd = new RippleDrawable(ColorStateList.valueOf(Color.GRAY), applicationModel.icon, null);
             imageView.setImageDrawable(rd);
             imageView.setTag(applicationModel);
             imageView.setOnClickListener(new View.OnClickListener() {
@@ -523,7 +523,7 @@ public final class Launcher extends Activity {
                     }
                 }
             });
-            imageView.setContentDescription(applicationModel.getLabel());
+            imageView.setContentDescription(applicationModel.label);
         }
     }
 
@@ -534,7 +534,7 @@ public final class Launcher extends Activity {
         @Override
         protected Integer doInBackground(final ApplicationModel... paramses) {
             for (ApplicationModel applicationModel : paramses) {
-                model.toggleDisabled(applicationModel.getPackageName(), applicationModel.getClassName());
+                model.toggleDisabled(applicationModel.packageName, applicationModel.className);
             }
 
             return 0;
@@ -554,7 +554,7 @@ public final class Launcher extends Activity {
         @Override
         protected Integer doInBackground(final ApplicationModel... paramses) {
             for (ApplicationModel applicationModel : paramses) {
-                model.resetUsage(applicationModel.getPackageName(), applicationModel.getClassName());
+                model.resetUsage(applicationModel.packageName, applicationModel.className);
             }
 
             return 0;
@@ -573,7 +573,7 @@ public final class Launcher extends Activity {
         @Override
         protected Integer doInBackground(final ApplicationModel... paramses) {
             for (ApplicationModel applicationModel : paramses) {
-                model.addUsage(applicationModel.getPackageName(), applicationModel.getClassName());
+                model.addUsage(applicationModel.packageName, applicationModel.className);
             }
 
             if (paramses.length == 0) {
@@ -654,7 +654,13 @@ public final class Launcher extends Activity {
             for (ResolveInfo resolveInfo : resolveInfos) {
                 i = i + 1;
                 final boolean disabled = model.isDisabled(resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name);
-                applicationModels.add(new ApplicationModel(resolveInfo.loadLabel(pm), resolveInfo.loadIcon(pm), resolveInfo.activityInfo.packageName, resolveInfo.activityInfo.name, disabled));
+                final ApplicationModel applicationModel = new ApplicationModel();
+                applicationModel.label = resolveInfo.loadLabel(pm);
+                applicationModel.icon = resolveInfo.loadIcon(pm);
+                applicationModel.packageName = resolveInfo.activityInfo.packageName;
+                applicationModel.className = resolveInfo.activityInfo.name;
+                applicationModel.disabled = disabled;
+                applicationModels.add(applicationModel);
                 if (i % REFRESH_NUMBER == 0) {
                     publishProgress();
                 }
