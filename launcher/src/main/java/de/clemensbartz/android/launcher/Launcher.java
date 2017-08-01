@@ -107,19 +107,12 @@ public final class Launcher extends Activity {
     /** The list of installed applications. */
     private List<ApplicationModel> applicationModels = new ArrayList<>(0);
     /** The broadcast receiver for package changes. */
-    private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver;
+    private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver = new PackageChangedBroadcastReceiver(this);
     /** The temporary application model for context menus. */
     private ApplicationModel contextMenuApplicationModel;
 
     /** The drawable for the launcher. */
     private Drawable icLauncher;
-
-    /**
-     * Create a new Launcher instance.
-     */
-    public Launcher() {
-        packageChangedBroadcastReceiver = new PackageChangedBroadcastReceiver(this);
-    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
