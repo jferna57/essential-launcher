@@ -29,7 +29,6 @@ import java.util.List;
 
 import de.clemensbartz.android.launcher.R;
 import de.clemensbartz.android.launcher.models.ApplicationModel;
-import de.clemensbartz.android.launcher.models.IApplicationModel;
 
 /**
  * Array adapter for the drawer. Takes an @{ApplicationModel}.
@@ -77,7 +76,7 @@ public final class DrawerListAdapter extends ArrayAdapter<ApplicationModel> {
             viewHolder = (ViewHolder) v.getTag();
         }
 
-        final IApplicationModel resolveInfo = getItem(position);
+        final ApplicationModel resolveInfo = getItem(position);
 
         if (resolveInfo != null && viewHolder != null) {
             viewHolder.icon.setContentDescription(resolveInfo.getLabel());

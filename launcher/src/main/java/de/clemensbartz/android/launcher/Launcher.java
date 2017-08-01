@@ -55,7 +55,6 @@ import de.clemensbartz.android.launcher.adapters.DrawerListAdapter;
 import de.clemensbartz.android.launcher.models.ApplicationModel;
 import de.clemensbartz.android.launcher.models.DockUpdateModel;
 import de.clemensbartz.android.launcher.models.HomeModel;
-import de.clemensbartz.android.launcher.models.IApplicationModel;
 import de.clemensbartz.android.launcher.receivers.PackageChangedBroadcastReceiver;
 import de.clemensbartz.android.launcher.tasks.CloseDatabaseAsyncTask;
 import de.clemensbartz.android.launcher.util.IntentUtil;
@@ -110,7 +109,7 @@ public final class Launcher extends Activity {
     /** The broadcast receiver for package changes. */
     private final PackageChangedBroadcastReceiver packageChangedBroadcastReceiver;
     /** The temporary application model for context menus. */
-    private IApplicationModel contextMenuApplicationModel;
+    private ApplicationModel contextMenuApplicationModel;
 
     /** The drawable for the launcher. */
     private Drawable icLauncher;
@@ -184,8 +183,8 @@ public final class Launcher extends Activity {
                     if (view instanceof ImageView) {
                         final ImageView contextImageView = (ImageView) view;
 
-                        if (contextImageView.getTag() instanceof IApplicationModel) {
-                            final IApplicationModel model = (IApplicationModel) contextImageView.getTag();
+                        if (contextImageView.getTag() instanceof ApplicationModel) {
+                            final ApplicationModel model = (ApplicationModel) contextImageView.getTag();
                             contextMenuApplicationModel = model;
 
                             contextMenu.setHeaderTitle(model.getLabel());
@@ -221,7 +220,7 @@ public final class Launcher extends Activity {
                     final ContextMenu.ContextMenuInfo contextMenuInfo) {
 
                 final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) contextMenuInfo;
-                final IApplicationModel applicationModel = applicationModels.get(info.position);
+                final ApplicationModel applicationModel = applicationModels.get(info.position);
                 contextMenuApplicationModel = applicationModel;
 
                 contextMenu.setHeaderTitle(applicationModel.getLabel());
@@ -372,7 +371,7 @@ public final class Launcher extends Activity {
      * Open an app from the model.
      * @param applicationModel the model
      */
-    public void openApp(final IApplicationModel applicationModel) {
+    public void openApp(final ApplicationModel applicationModel) {
         new LoadMostUsedAppsAsyncTask().execute(applicationModel);
 
         final ComponentName component = new ComponentName(applicationModel.getPackageName(), applicationModel.getClassName());
@@ -498,7 +497,7 @@ public final class Launcher extends Activity {
      * @param imageView the view
      * @param applicationModel the model, can be <code>null</code>
      */
-    private void updateDock(final ImageView imageView, final IApplicationModel applicationModel) {
+    private void updateDock(final ImageView imageView, final ApplicationModel applicationModel) {
         if (applicationModel == null) {
             if (imageView.getTag() != null) {
                 imageView.setTag(null);
@@ -509,8 +508,8 @@ public final class Launcher extends Activity {
         } else {
             final Object tag = imageView.getTag();
 
-            if (tag instanceof IApplicationModel) {
-                final IApplicationModel tagModel = (IApplicationModel) tag;
+            if (tag instanceof ApplicationModel) {
+                final ApplicationModel tagModel = (ApplicationModel) tag;
 
                 if (tagModel.getPackageName().equals(applicationModel.getPackageName())
                         && tagModel.getClassName().equals(applicationModel.getClassName())
@@ -538,10 +537,10 @@ public final class Launcher extends Activity {
     /**
      * Toggle dock visibility for an application.
      */
-    private class ToggleDockAsyncTask extends AsyncTask<IApplicationModel, Integer, Integer> {
+    private class ToggleDockAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
         @Override
-        protected Integer doInBackground(final IApplicationModel... paramses) {
-            for (IApplicationModel applicationModel : paramses) {
+        protected Integer doInBackground(final ApplicationModel... paramses) {
+            for (ApplicationModel applicationModel : paramses) {
                 model.toggleDisabled(applicationModel.getPackageName(), applicationModel.getClassName());
             }
 
@@ -558,10 +557,10 @@ public final class Launcher extends Activity {
     /**
      * Async for resetting the database.
      */
-    private class ResetUsageAsyncTask extends AsyncTask<IApplicationModel, Integer, Integer> {
+    private class ResetUsageAsyncTask extends AsyncTask<ApplicationModel, Integer, Integer> {
         @Override
-        protected Integer doInBackground(final IApplicationModel... paramses) {
-            for (IApplicationModel applicationModel : paramses) {
+        protected Integer doInBackground(final ApplicationModel... paramses) {
+            for (ApplicationModel applicationModel : paramses) {
                 model.resetUsage(applicationModel.getPackageName(), applicationModel.getClassName());
             }
 
@@ -577,10 +576,10 @@ public final class Launcher extends Activity {
     /**
      * Async task for loading the most used applications.
      */
-    private class LoadMostUsedAppsAsyncTask extends AsyncTask<IApplicationModel, DockUpdateModel, Integer> {
+    private class LoadMostUsedAppsAsyncTask extends AsyncTask<ApplicationModel, DockUpdateModel, Integer> {
         @Override
-        protected Integer doInBackground(final IApplicationModel... paramses) {
-            for (IApplicationModel applicationModel : paramses) {
+        protected Integer doInBackground(final ApplicationModel... paramses) {
+            for (ApplicationModel applicationModel : paramses) {
                 model.addUsage(applicationModel.getPackageName(), applicationModel.getClassName());
             }
 
@@ -588,7 +587,7 @@ public final class Launcher extends Activity {
                 model.updateApplications();
             }
 
-            final List<IApplicationModel> mostUsedApplications = model.getMostUsedApplications();
+            final List<ApplicationModel> mostUsedApplications = model.getMostUsedApplications();
 
             for (int i = 0; i < dockImageViews.size(); i++) {
                 if (i >= mostUsedApplications.size()) {

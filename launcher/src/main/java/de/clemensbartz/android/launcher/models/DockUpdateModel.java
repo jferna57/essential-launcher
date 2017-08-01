@@ -29,7 +29,7 @@ public final class DockUpdateModel {
     /** The image view. */
     private final ImageView imageView;
     /** The application model. */
-    private final IApplicationModel applicationModel;
+    private final ApplicationModel applicationModel;
 
     /**
      * Create a new dock update model for an image view and an
@@ -39,7 +39,7 @@ public final class DockUpdateModel {
      */
     public DockUpdateModel(
             final ImageView imageView,
-            final IApplicationModel applicationModel) {
+            final ApplicationModel applicationModel) {
         this.imageView = imageView;
         this.applicationModel = applicationModel;
     }
@@ -56,7 +56,7 @@ public final class DockUpdateModel {
      *
      * @return the application model
      */
-    public IApplicationModel getApplicationModel() {
+    public ApplicationModel getApplicationModel() {
         return applicationModel;
     }
 }

@@ -94,7 +94,7 @@ public final class HomeModel {
     private boolean hideOverlay = false;
 
     /** Cache for most used applications. */
-    private List<IApplicationModel> mostUsedApplications =
+    private List<ApplicationModel> mostUsedApplications =
             new ArrayList<>(NUMBER_OF_APPS);
 
     /**
@@ -114,7 +114,7 @@ public final class HomeModel {
         hideOverlay = preferences.getBoolean(KEY_HIDE_OVERLAY_ID, false);
     }
 
-    public List<IApplicationModel> getMostUsedApplications() {
+    public List<ApplicationModel> getMostUsedApplications() {
         return Collections.unmodifiableList(mostUsedApplications);
     }
 
