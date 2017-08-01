@@ -26,7 +26,7 @@ If you want to support development, please make sure:
 - You use Android Studio >= 2.3.3
 - You must not enable minify.
 - You use SDK Version >= 21.
-- You use Java >= 7.
+- You use Java >= 8.
 - The maximum size for the APK is 50 KB.
 - You add your own `local.properties` file pointing to your android sdk: `sdk.dir=/opt/android-sdk-linux/`
 
