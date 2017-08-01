@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2017  Clemens Bartz
+  ~
+  ~     This program is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     This program is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources>
+    <string name="app_name">Launcher Essencial</string>
+    <string name="remove_widget">Remover widget</string>
+    <string name="resetcounter">Reiniciar o contador</string>
+    <string name="uninstall">Desinstalar</string>
+    <string name="appinfo">Informações do aplicativo</string>
+    <string name="choose_widget">Escolha o widget</string>
+    <string name="ok">OK</string>
+    <string name="drawer_short_press_description">Mostrar todos os aplicativos</string>
+    <string name="icon_long_press_description">Pressão longa: reinciar o condator or esconder aplicativo</string>
+    <string name="drawer_long_press_description">Pressão longa: mudança widget</string>
+    <string name="icon_short_press_description">Mostra a maioria dos aplicativos usados</string>
+    <string name="showInDock">Mostrar em dock</string>
+    <string name="unassigned_dock">Item não atribuído</string>
+    <string name="open_drawer">Mostrar todos os aplicativos</string>
+    <string name="nowidgetset">Nenhum widget selecionado</string>
+</resources>
