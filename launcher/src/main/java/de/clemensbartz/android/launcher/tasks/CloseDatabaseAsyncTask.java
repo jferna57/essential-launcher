@@ -19,18 +19,18 @@ package de.clemensbartz.android.launcher.tasks;
 
 import android.os.AsyncTask;
 
-import de.clemensbartz.android.launcher.models.IHomeModel;
+import de.clemensbartz.android.launcher.models.HomeModel;
 
 /**
  * Async task for closing the database.
  *
  * @author Clemens Bartz
  */
-public final class CloseDatabaseAsyncTask extends AsyncTask<IHomeModel, Integer, Integer> {
+public final class CloseDatabaseAsyncTask extends AsyncTask<HomeModel, Integer, Integer> {
 
     @Override
-    protected Integer doInBackground(final IHomeModel... paramses) {
-        for (final IHomeModel model : paramses) {
+    protected Integer doInBackground(final HomeModel... paramses) {
+        for (final HomeModel model : paramses) {
             model.close();
         }
         return 0;

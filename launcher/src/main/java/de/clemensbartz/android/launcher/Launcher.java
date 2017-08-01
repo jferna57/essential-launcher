@@ -66,7 +66,7 @@ import de.clemensbartz.android.launcher.util.IntentUtil;
  * @author Clemens Bartz
  * @since 1.0
  */
-public final class Launcher extends Activity implements ILauncher {
+public final class Launcher extends Activity {
 
     /** Id to identify the home layout. */
     private static final int HOME_ID = 0;
@@ -471,7 +471,6 @@ public final class Launcher extends Activity implements ILauncher {
         }
     }
 
-    @Override
     public void updateApplications() {
         new UpdateAsyncTask().execute();
     }

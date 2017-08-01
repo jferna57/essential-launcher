@@ -21,7 +21,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import de.clemensbartz.android.launcher.ILauncher;
+import de.clemensbartz.android.launcher.Launcher;
 
 /**
  * Broadcast receiver for package change.
@@ -30,14 +30,14 @@ import de.clemensbartz.android.launcher.ILauncher;
  */
 public final class PackageChangedBroadcastReceiver extends BroadcastReceiver {
 
-    /** The ILauncher. */
-    private final ILauncher launcher;
+    /** The Launcher. */
+    private final Launcher launcher;
 
     /**
      * Create a broadcast receiver for a launcher.
      * @param launcher the launcher
      */
-    public PackageChangedBroadcastReceiver(final ILauncher launcher) {
+    public PackageChangedBroadcastReceiver(final Launcher launcher) {
         this.launcher = launcher;
     }
 

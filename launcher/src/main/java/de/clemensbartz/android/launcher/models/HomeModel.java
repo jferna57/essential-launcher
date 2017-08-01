@@ -40,7 +40,7 @@ import de.clemensbartz.android.launcher.db.ApplicationUsageModel;
  * @author Clemens Bartz
  * @since 1.0
  */
-public final class HomeModel implements IHomeModel {
+public final class HomeModel {
 
     /** The total cached number of apps. */
     public static final int NUMBER_OF_APPS = 6;
@@ -107,7 +107,6 @@ public final class HomeModel implements IHomeModel {
         pm = context.getPackageManager();
     }
 
-    @Override
     public void loadValues() {
         updateApplications();
 
@@ -115,7 +114,6 @@ public final class HomeModel implements IHomeModel {
         hideOverlay = preferences.getBoolean(KEY_HIDE_OVERLAY_ID, false);
     }
 
-    @Override
     public List<IApplicationModel> getMostUsedApplications() {
         return Collections.unmodifiableList(mostUsedApplications);
     }
@@ -180,7 +178,6 @@ public final class HomeModel implements IHomeModel {
         } while (!success);
     }
 
-    @Override
     public void toggleDisabled(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -229,7 +226,6 @@ public final class HomeModel implements IHomeModel {
         }
     }
 
-    @Override
     public boolean isDisabled(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getReadableDatabase();
 
@@ -263,7 +259,6 @@ public final class HomeModel implements IHomeModel {
         return disabled;
     }
 
-    @Override
     public void resetUsage(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -313,7 +308,6 @@ public final class HomeModel implements IHomeModel {
         updateApplications();
     }
 
-    @Override
     public void addUsage(final String packageName, final String className) {
         final SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -376,29 +370,24 @@ public final class HomeModel implements IHomeModel {
                 SELECTION, new String[]{packageName, className});
     }
 
-    @Override
     public int getAppWidgetId() {
         return appWidgetId;
     }
 
-    @Override
     public void setAppWidgetId(final int appWidgetId) {
         preferences.edit().putInt(KEY_APPWIDGET_ID, appWidgetId).apply();
         this.appWidgetId = appWidgetId;
     }
 
-    @Override
     public boolean getHideOverlay() {
         return hideOverlay;
     }
 
-    @Override
     public void setHideOverlay() {
         preferences.edit().putBoolean(KEY_HIDE_OVERLAY_ID, true).apply();
         this.hideOverlay = true;
     }
 
-    @Override
     public void close() {
         if (dbHelper.getWritableDatabase().isOpen()) {
             dbHelper.getWritableDatabase().close();
